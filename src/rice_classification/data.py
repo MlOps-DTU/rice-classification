@@ -7,6 +7,8 @@ def normalize(images: torch.Tensor) -> torch.Tensor:
     return (images - images.mean()) / images.std()
 
 
+"../../data/raw"
+"../../data/processed"
 
 def preprocess_data(raw_dir: str, processed_dir: str) -> None:
     """Process raw data and save it to processed directory."""
@@ -15,8 +17,8 @@ def preprocess_data(raw_dir: str, processed_dir: str) -> None:
 
     # Define transformations for the images
     transform = transforms.Compose([
-        transforms.Resize((150, 150)),
-        normalize(),                    # Resize all images to a fixed size
+        transforms.Resize((150, 150)),  # Resize all images to a fixed size
+        normalize(),                    # Normalize the values of the images
         transforms.ToTensor(),          # Convert images to PyTorch tensors
     ])
 
@@ -46,10 +48,10 @@ def preprocess_data(raw_dir: str, processed_dir: str) -> None:
 
 def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
     """Return train and test datasets for the rice."""
-    train_images = torch.load("data/processed/train_images.pt")
-    train_target = torch.load("data/processed/train_target.pt")
-    test_images = torch.load("data/processed/test_images.pt")
-    test_target = torch.load("data/processed/test_target.pt")
+    train_images = torch.load("../../data/processed/train_images.pt")
+    train_target = torch.load("../../data/processed/train_target.pt")
+    test_images = torch.load("../../data/processed/test_images.pt")
+    test_target = torch.load("../../data/processed/test_target.pt")
 
     train_set = torch.utils.data.TensorDataset(train_images, train_target)
     test_set = torch.utils.data.TensorDataset(test_images, test_target)
