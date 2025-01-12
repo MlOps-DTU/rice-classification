@@ -7,7 +7,7 @@ from model import RiceClassificationModel
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 10, num_classes: int = 5) -> None:
+def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 1, num_classes: int = 5) -> None:
     """Train the rice classification model."""
     print("Training the rice classification model")
     print(f"{lr=}, {batch_size=}, {epochs=}, {num_classes=}")
@@ -49,12 +49,8 @@ def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 10, num_classes:
 
     print("Training complete")
 
-    # Ensure the outputs/models directory exists
-    os.makedirs("outputs/models", exist_ok=True)
-    torch.save(model.state_dict(), "outputs/models/rice_model.pth")
-
-    # Ensure the outputs/figures directory exists
-    os.makedirs("outputs/figures", exist_ok=True)
+    # Save the model in the models folder
+    torch.save(model.state_dict(), "../../models/rice_model.pth")
 
     fig, axs = plt.subplots(1, 2, figsize=(15, 5))
     axs[0].plot(statistics["train_loss"], label="Train Loss")
@@ -67,7 +63,7 @@ def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 10, num_classes:
     axs[1].set_xlabel("Epoch")
     axs[1].set_ylabel("Accuracy")
 
-    fig.savefig("outputs/figures/training_statistics.png")
+    fig.savefig("../../reports/figures/training_curve.png")
 
 if __name__ == "__main__":
     typer.run(train)

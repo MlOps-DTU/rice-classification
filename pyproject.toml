@@ -30,3 +30,7 @@ line-length = 120
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[project.scripts]
+train = "rice_classification.train:main"
+evaluate = "rice_classification.evaluate:main"

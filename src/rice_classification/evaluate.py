@@ -1,7 +1,7 @@
 import torch
 import typer
-from data import get_rice_pictures
-from model import RiceClassificationModel
+from rice_classification.data import get_rice_pictures
+from rice_classification.model import RiceClassificationModel
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 

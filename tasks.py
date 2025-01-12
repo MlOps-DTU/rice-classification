@@ -60,6 +60,12 @@ def docker_build(ctx: Context, progress: str = "plain") -> None:
         pty=not WINDOWS
     )
 
+@task
+def git(ctx, message):
+    ctx.run(f"git add .")
+    ctx.run(f"git commit -m '{message}'")
+    ctx.run(f"git push")
+
 # Documentation commands
 @task(dev_requirements)
 def build_docs(ctx: Context) -> None:
