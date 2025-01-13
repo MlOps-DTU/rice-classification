@@ -1,20 +1,17 @@
 import torch
-import typer
 from rice_classification.data import get_rice_pictures
 from rice_classification.model import RiceClassificationModel
+import hydra
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-def evaluate(model_checkpoint: str, num_classes: int = 5) -> None:
-    """Evaluate a trained model."""
-    print("Evaluating the rice classification model")
-    print(model_checkpoint)
-
-    model = RiceClassificationModel(num_classes=num_classes).to(DEVICE)
-    model.load_state_dict(torch.load(model_checkpoint))
+@hydra.main(config_path="../../configs", config_name="evaluate.yaml", version_base=None)
+def main(cfg) -> None:
+    model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
+    model.load_state_dict(torch.load(cfg.parameters.model_path, weights_only = True))
 
     _, test_set = get_rice_pictures()
-    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=32)
+    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=cfg.parameters.batch_size)
 
     model.eval()
 
@@ -30,4 +27,4 @@ def evaluate(model_checkpoint: str, num_classes: int = 5) -> None:
     print(f"Test accuracy: {correct / total:.4f}")
 
 if __name__ == "__main__":
-    typer.run(evaluate)
+    main()

@@ -1,27 +1,26 @@
 import matplotlib.pyplot as plt
 import torch
-import typer
-import os
 from data import get_rice_pictures
 from model import RiceClassificationModel
+import hydra
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 1, num_classes: int = 5) -> None:
+@hydra.main(config_path="../../configs", config_name="train.yaml", version_base=None)
+def main(cfg) -> None:
     """Train the rice classification model."""
     print("Training the rice classification model")
-    print(f"{lr=}, {batch_size=}, {epochs=}, {num_classes=}")
 
-    model = RiceClassificationModel(num_classes=num_classes).to(DEVICE)
+    model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
     train_set, _ = get_rice_pictures()
 
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
+    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=cfg.parameters.batch_size, shuffle=True)
 
     loss_fn = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = hydra.utils.instantiate(cfg.optimizer, params=model.parameters())
 
     statistics = {"train_loss": [], "train_accuracy": []}
-    for epoch in range(epochs):
+    for epoch in range(cfg.parameters.epoch):
         model.train()
         epoch_loss = 0.0
         epoch_accuracy = 0.0
@@ -66,4 +65,4 @@ def train(lr: float = 1e-3, batch_size: int = 32, epochs: int = 1, num_classes: 
     fig.savefig("../../reports/figures/training_curve.png")
 
 if __name__ == "__main__":
-    typer.run(train)
+    main()

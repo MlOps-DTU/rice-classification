@@ -1,0 +1,10 @@
+? ''
+: ? ''
+  : ? ''
+    : ? ''
+      : ? ''
+        : ? ''
+          : configs:
+              params:
+                num_classes: 5
+                model_path: models/rice_model.pth
