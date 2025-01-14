@@ -1,4 +1,7 @@
 [core]
-    remote = myremote
+    remote = remote_storage
 ['remote "myremote"']
     url = gs://emils_mlops_data_bucket/data
+['remote "remote_storage"']
+    url = gs://emils_mlops_data_bucket/
+    version_aware = true
