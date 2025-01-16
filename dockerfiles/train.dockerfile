@@ -6,10 +6,15 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 COPY src src/
+COPY data data/
+COPY configs configs/
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 COPY README.md README.md
 COPY pyproject.toml pyproject.toml
+
+RUN mkdir models
+RUN mkdir -p reports/figures
 
 RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
