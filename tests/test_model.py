@@ -2,7 +2,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import pytest
-from src.rice_classification.model import RiceClassificationModel 
+from src.rice_classification.model import RiceClassificationModel
 
 
 def test_model_construction():
@@ -10,7 +10,7 @@ def test_model_construction():
     Test the RiceClassificationModel construction.
     This test checks if the model can be instantiated, has the correct architecture, and the expected number of parameters.
     """
-    num_classes = 5  
+    num_classes = 5
     model = RiceClassificationModel(num_classes=num_classes)
 
     assert model is not None, "Model instantiation failed."
@@ -35,10 +35,9 @@ def test_model_training():
     model = RiceClassificationModel(num_classes=num_classes)
 
     batch_size = 4
-    dummy_images = torch.randn(batch_size, 3, 50, 50)  
-    dummy_labels = torch.randint(0, num_classes, (batch_size,))  
+    dummy_images = torch.randn(batch_size, 3, 50, 50)
+    dummy_labels = torch.randint(0, num_classes, (batch_size,))
 
-    
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
@@ -54,12 +53,13 @@ def test_model_training():
     for param in model.parameters():
         assert param.grad is not None, "Gradients are None, model not learning."
 
-    assert output.shape == (batch_size, num_classes), f"Expected output shape ({batch_size}, {num_classes}), but got {output.shape}."
+    assert output.shape == (batch_size, num_classes), (
+        f"Expected output shape ({batch_size}, {num_classes}), but got {output.shape}."
+    )
 
 
 if __name__ == "__main__":
     pytest.main()
-
 
 
 """

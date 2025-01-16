@@ -26,6 +26,7 @@ class RiceClassificationModel(nn.Module):
             Returns:
                 torch.Tensor: Output tensor representing the class scores for each image in the batch.
     """
+
     def __init__(self, num_classes: int) -> None:
         super().__init__()
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
@@ -52,7 +53,7 @@ class RiceClassificationModel(nn.Module):
 
 
 if __name__ == "__main__":
-    num_classes = 5 
+    num_classes = 5
     model = RiceClassificationModel(num_classes=num_classes)
     print(f"Model architecture: {model}")
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")

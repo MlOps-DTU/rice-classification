@@ -1,3 +1,4 @@
 pytest
 torchvision
 numpy
+ruff

@@ -7,7 +7,7 @@ from loguru import logger
 from dotenv import load_dotenv
 import os
 import wandb
-from sklearn.metrics import RocCurveDisplay, accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 
 # Load environment variables
@@ -19,13 +19,14 @@ logger.add("my_log.log", level="DEBUG", rotation="100 MB")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
+
 @hydra.main(config_path=f"{os.getcwd()}/configs", config_name="train.yaml", version_base=None)
 def main(cfg) -> None:
     """
     Train the rice classification model.
 
     Args:
-        cfg: Configuration object containing parameters for training, such as 
+        cfg: Configuration object containing parameters for training, such as
              number of classes, batch size, number of epochs, and optimizer settings.
 
     Returns:
@@ -45,7 +46,7 @@ def main(cfg) -> None:
 
     # Initialize the model and move it to the specified device
     model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
-    
+
     # Load the training dataset
     train_set, _ = get_rice_pictures()
 
@@ -62,10 +63,11 @@ def main(cfg) -> None:
     statistics = {"train_loss": [], "train_accuracy": []}
 
     run = wandb.init(
-        project="rice-classification", job_type = "train",
+        project="rice-classification",
+        job_type="train",
         config={"lr": cfg.optimizer.lr, "batch_size": cfg.parameters.batch_size, "epochs": cfg.parameters.epoch},
     )
-    
+
     # Training loop for the specified number of epochs
     for epoch in range(cfg.parameters.epoch):
         model.train()  # Set the model to training mode
@@ -76,28 +78,28 @@ def main(cfg) -> None:
         # Iterate over batches of training data
         for i, (img, target) in enumerate(train_dataloader):
             # Move data to the specified device
-            img, target = img.to(DEVICE), target.to(DEVICE) 
+            img, target = img.to(DEVICE), target.to(DEVICE)
 
             # Zero the gradients
-            optimizer.zero_grad()  
+            optimizer.zero_grad()
 
             # Forward pass
-            y_pred = model(img)  
+            y_pred = model(img)
 
             # Compute the loss
-            loss = loss_fn(y_pred, target)  
+            loss = loss_fn(y_pred, target)
 
             # Backward pass
             loss.backward()
 
             # Update the model parameters
             optimizer.step()
-            
+
             # Accumulate the loss
-            epoch_loss += loss.item()  
+            epoch_loss += loss.item()
 
             # Compute accuracy
-            accuracy = (y_pred.argmax(dim=1) == target).float().mean().item()  
+            accuracy = (y_pred.argmax(dim=1) == target).float().mean().item()
 
             # Log the loss and accuracy to Weights and Biases
             wandb.log({"train_loss": loss.item(), "train_accuracy": accuracy})
@@ -121,10 +123,9 @@ def main(cfg) -> None:
         # Print epoch statistics
         print(f"Epoch {epoch}: Loss = {epoch_loss:.4f}, Accuracy = {epoch_accuracy:.4f}")
 
-
     preds = torch.cat(preds, 0)
     targets = torch.cat(targets, 0)
-    
+
     final_accuracy = accuracy_score(targets, preds.argmax(dim=1))
     final_precision = precision_score(targets, preds.argmax(dim=1), average="weighted")
     final_recall = recall_score(targets, preds.argmax(dim=1), average="weighted")
@@ -163,6 +164,7 @@ def main(cfg) -> None:
 
     # Log the figure to Weights and Biases
     wandb.log({"training_curve": wandb.Image(fig)})
+
 
 if __name__ == "__main__":
     main()
