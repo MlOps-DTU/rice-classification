@@ -34,3 +34,4 @@ omit = ["tests/*"]
 [project.scripts]
 train = "rice_classification.train:main"
 evaluate = "rice_classification.evaluate:main"
+data = "rice_classification.data:main"

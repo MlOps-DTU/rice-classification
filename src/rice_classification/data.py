@@ -1,10 +1,17 @@
+import os
 import torch
 from torchvision import datasets, transforms
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Subset
 import hydra
+import sys
+from loguru import logger
 
-@hydra.main(config_path="../../configs", config_name="data.yaml", version_base=None)
+# Add a logger to the script that logs messages to a file
+logger.add("my_log.log", level="DEBUG", rotation="100 MB")
+
+
+@hydra.main(config_path=f"{os.getcwd()}/configs", config_name="data.yaml", version_base=None)
 def main(cfg) -> None:
     """
     Process raw data and save it to the processed directory.
@@ -27,6 +34,7 @@ def main(cfg) -> None:
     ])
 
     # Load the dataset
+    logger.info("The dataset is loaded from the raw data directory.")
     data_dir = f"{cfg.parameters.raw_dir}"
     dataset = datasets.ImageFolder(root=data_dir, transform=transform)
 
@@ -34,6 +42,7 @@ def main(cfg) -> None:
     targets = dataset.targets
 
     # Split the dataset into training and testing sets
+    logger.info("The dataset is split into training and testing sets.")
     train_indices, test_indices = train_test_split(
     range(len(dataset)),
     stratify=targets,  # Ensures class balance
@@ -46,6 +55,7 @@ def main(cfg) -> None:
 
     processed_data_dir = f"{cfg.parameters.processed_dir}"
 
+    logger.info("The dataset is saved to the processed data directory.")
     torch.save(train, f"{processed_data_dir}/train.pt")
     torch.save(test, f"{processed_data_dir}/test.pt")
 
@@ -58,8 +68,9 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
         tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]: 
             A tuple containing the training dataset and the testing dataset.
     """
-    train_set = torch.load("../../data/processed/train.pt", weights_only=False)
-    test_set = torch.load("../../data/processed/test.pt", weights_only=False)
+    logger.info("The datasets are loaded from the processed data directory.")
+    train_set = torch.load("data/processed/train.pt", weights_only=False)
+    test_set = torch.load("data/processed/test.pt", weights_only=False)
     
     return train_set, test_set
 

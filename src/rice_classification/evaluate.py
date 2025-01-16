@@ -2,10 +2,15 @@ import torch
 from rice_classification.data import get_rice_pictures
 from rice_classification.model import RiceClassificationModel
 import hydra
+from loguru import logger
+import os
+
+# Add a logger to the script that logs messages to a file
+logger.add("my_log.log", level="DEBUG", rotation="100 MB")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-@hydra.main(config_path="configs", config_name="evaluate.yaml", version_base=None)
+@hydra.main(config_path=f"{os.getcwd()}/configs", config_name="evaluate.yaml", version_base=None)
 def main(cfg) -> None:
     """
     Main function to evaluate the rice classification model.
@@ -24,10 +29,14 @@ def main(cfg) -> None:
     5. Evaluates the model on the test dataset and calculates the accuracy.
     6. Prints the test accuracy.
     """
+
+    
     # Specify the model and move it to the appropriate device
+    logger.info("A model is initialized for evaluation.")
     model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
 
     # Load the model weights from the already trained model
+    logger.info("The trained model is loaded for evaluation.")
     model.load_state_dict(torch.load(cfg.parameters.model_path, weights_only = True))
 
     # Load the test set
@@ -46,6 +55,9 @@ def main(cfg) -> None:
             correct += (y_pred.argmax(dim=1) == target).float().sum().item()
             total += target.size(0)
 
+    # Calculate the accuracy
+    accuracy = correct / total
+    logger.info(f"The test accuracy is {accuracy:.4f}")
     print(f"Test accuracy: {correct / total:.4f}")
 
 if __name__ == "__main__":
