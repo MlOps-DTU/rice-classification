@@ -55,9 +55,13 @@ def main(cfg) -> None:
 
     processed_data_dir = f"{cfg.parameters.processed_dir}"
 
+    # Convert to absolute paths
+    train_file = os.path.abspath(os.path.join(processed_data_dir, "train.pt"))
+    test_file = os.path.abspath(os.path.join(processed_data_dir, "test.pt"))
+    
     logger.info("The dataset is saved to the processed data directory.")
-    torch.save(train, f"{processed_data_dir}/train.pt")
-    torch.save(test, f"{processed_data_dir}/test.pt")
+    torch.save(train, train_file)
+    torch.save(test, test_file)
 
 def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
     """
