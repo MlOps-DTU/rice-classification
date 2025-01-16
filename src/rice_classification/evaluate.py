@@ -5,14 +5,36 @@ import hydra
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-@hydra.main(config_path="../../configs", config_name="evaluate.yaml", version_base=None)
+@hydra.main(config_path="configs", config_name="evaluate.yaml", version_base=None)
 def main(cfg) -> None:
+    """
+    Main function to evaluate the rice classification model.
+
+    Args:
+        cfg: Configuration object containing parameters for the evaluation process.
+
+    Returns:
+        None
+
+    The function performs the following steps:
+    1. Initializes the rice classification model and moves it to the appropriate device.
+    2. Loads the model weights from a pre-trained model.
+    3. Loads the test dataset and creates a DataLoader for it.
+    4. Sets the model to evaluation mode.
+    5. Evaluates the model on the test dataset and calculates the accuracy.
+    6. Prints the test accuracy.
+    """
+    # Specify the model and move it to the appropriate device
     model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
+
+    # Load the model weights from the already trained model
     model.load_state_dict(torch.load(cfg.parameters.model_path, weights_only = True))
 
+    # Load the test set
     _, test_set = get_rice_pictures()
     test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=cfg.parameters.batch_size)
 
+    # Set the model to evaluation mode
     model.eval()
 
     # Evaluate the model

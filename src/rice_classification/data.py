@@ -6,8 +6,19 @@ import hydra
 
 @hydra.main(config_path="../../configs", config_name="data.yaml", version_base=None)
 def main(cfg) -> None:
-    """Process raw data and save it to processed directory."""
-   
+    """
+    Process raw data and save it to the processed directory.
+    Args:
+        cfg: Configuration object containing parameters for data processing.
+    The function performs the following steps:
+    1. Defines transformations for the images including resizing, converting to tensor, and normalizing.
+    2. Loads the dataset from the specified raw data directory.
+    3. Retrieves the labels from the dataset.
+    4. Splits the dataset into training and testing sets while ensuring class balance.
+    5. Creates subsets for training and testing data.
+    6. Saves the processed training and testing data to the specified processed data directory.
+    """
+    
     # Define transformations for the images
     transform = transforms.Compose([
         transforms.Resize((cfg.parameters.height, cfg.parameters.width)),
@@ -39,7 +50,14 @@ def main(cfg) -> None:
     torch.save(test, f"{processed_data_dir}/test.pt")
 
 def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
-    """Return train and test datasets for the rice."""
+    """
+    Loads and returns the training and testing datasets for rice classification.
+    The function loads the datasets from preprocessed files located at 
+    "../../data/processed/train.pt" and "../../data/processed/test.pt".
+    Returns:
+        tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]: 
+            A tuple containing the training dataset and the testing dataset.
+    """
     train_set = torch.load("../../data/processed/train.pt", weights_only=False)
     test_set = torch.load("../../data/processed/test.pt", weights_only=False)
     
