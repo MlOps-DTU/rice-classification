@@ -1,0 +1,54 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    '.',
+    '-t',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/project/train:latest',
+    '-f',
+    'dockerfiles/train.dockerfile'
+  ]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/project/train:latest'
+  ]
+
+- name: 'alpine'
+  id: 'Replace values in the training config'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+      mv config.yaml.tmp config.yaml
+  secretEnv: ['WANDB_API_KEY']
+
+- name: 'alpine'
+  id: 'Show config'
+  waitFor: ['Replace values in the training config']
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+      cat config.yaml
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Train on vertex AI'
+  waitFor: ['Replace values in the training config']
+  args: [
+    'ai',
+    'custom-jobs',
+    'create',
+    '--region',
+    'europe-west1',
+    '--display-name',
+    'rice-classification-training',
+    '--config',
+    'config.yaml'
+  ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
