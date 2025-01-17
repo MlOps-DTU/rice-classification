@@ -53,9 +53,10 @@ def test_model_training():
     for param in model.parameters():
         assert param.grad is not None, "Gradients are None, model not learning."
 
-    assert output.shape == (batch_size, num_classes), (
-        f"Expected output shape ({batch_size}, {num_classes}), but got {output.shape}."
-    )
+    assert output.shape == (
+        batch_size,
+        num_classes,
+    ), f"Expected output shape ({batch_size}, {num_classes}), but got {output.shape}."
 
 
 if __name__ == "__main__":
@@ -65,17 +66,17 @@ if __name__ == "__main__":
 """
 COVERAGE REPORT
 
->> coverage run -m pytest test_model.py      
+>> coverage run -m pytest test_model.py
 ======================================================= test session starts ========================================================
 platform win32 -- Python 3.12.0, pytest-8.3.4, pluggy-1.5.0
 rootdir: C:/Users/USUARIO/Documents/DTU/MLOps2/rice-classification
 configfile: pyproject.toml
 plugins: anyio-4.8.0, hydra-core-1.3.2
-collected 2 items                                                                                                                   
+collected 2 items
 
 test_model.py ..                                                                                                              [100%]
 
-======================================================== 2 passed in 4.66s ========================================================= 
+======================================================== 2 passed in 4.66s =========================================================
 
 
 >> coverage report
