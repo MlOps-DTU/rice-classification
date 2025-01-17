@@ -6,7 +6,7 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 COPY src src/
-COPY requirements.txt requirements.txt
+COPY requirements_app.txt requirements_app.txt
 COPY requirements_dev.txt requirements_dev.txt
 COPY README.md README.md
 COPY pyproject.toml pyproject.toml
@@ -14,4 +14,4 @@ COPY pyproject.toml pyproject.toml
 RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
-ENTRYPOINT ["uvicorn", "--app-dir src/rice_classification", "--host", "0.0.0.0", "--port", "80", "ml_app:app"]
+ENTRYPOINT ["uvicorn", "--app-dir src/rice_classification", "--host", "0.0.0.0", "--port", "80", "api:app"]
