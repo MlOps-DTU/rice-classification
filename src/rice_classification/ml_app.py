@@ -7,9 +7,12 @@ import torchvision.transforms as transforms
 from loguru import logger
 import os
 from rice_classification.model import RiceClassificationModel
+from dotenv import load_dotenv
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
+load_dotenv()
+wanb_api_key = os.getenv("WANDB_API_KEY")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
