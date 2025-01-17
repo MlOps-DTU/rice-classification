@@ -7,3 +7,6 @@ scikit_learn==1.6.0
 torch==2.5.1
 torchvision==0.20.1
 wandb==0.19.2
+fastapi==0.115.6
+Pillow==11.1.0
+pytest==8.3.4
