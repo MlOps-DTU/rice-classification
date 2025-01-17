@@ -21,7 +21,7 @@ def setup_data(tmp_path):
     class_0.mkdir()
     class_1.mkdir()
 
-    for i in range(4):
+    for i in range(5):
         (class_0 / f"image_{i}.png").touch() if i % 2 == 0 else (class_1 / f"image_{i}.png").touch()
 
     return {"raw_dir": raw_dir, "processed_dir": processed_dir}
