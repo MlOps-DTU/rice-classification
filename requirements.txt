@@ -10,4 +10,6 @@ wandb==0.19.2
 fastapi==0.115.6
 Pillow==11.1.0
 pytest==8.3.4
-
+uvicorn==0.23.2
+pydantic==2.10.5
+python-multipart==0.0.20
