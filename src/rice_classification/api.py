@@ -6,7 +6,7 @@ import wandb
 import torchvision.transforms as transforms
 from loguru import logger
 import os
-from rice_classification.model import RiceClassificationModel
+from src.rice_classification.model import RiceClassificationModel
 from dotenv import load_dotenv
 
 # Add a logger to the script that logs messages to a file
@@ -21,8 +21,6 @@ CATEGORIES = ['arborio', 'basmati', 'ipsala', 'jasmine', 'karacadag']
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load and clean up model on startup and shutdown."""
-    global model, transform
-
     print("Loading model")
 
     # Initialize a new run
@@ -53,10 +51,16 @@ async def lifespan(app: FastAPI):
         transforms.Normalize(mean=[0.5], std=[0.5]),
     ])
 
+    # Store model and transform in app.state for global access
+    app.state.model = model
+    app.state.transform = transform
+
     yield
 
+    # Cleanup
     print("Cleaning up")
-    del model
+    del app.state.model
+    del app.state.transform
 
 app = FastAPI(lifespan=lifespan)
 
@@ -68,6 +72,10 @@ def read_root():
 @app.post("/predict/")
 async def predict(data: UploadFile = File(...)):
     """Make a prediction for an uploaded image."""
+    # Access the model and transform from app.state
+    model = app.state.model
+    transform = app.state.transform
+
     i_image = Image.open(data.file)
     if i_image.mode != "RGB":
         i_image = i_image.convert(mode="RGB")
