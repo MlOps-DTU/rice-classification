@@ -1,5 +1,5 @@
-# Use Google Cloud SDK image as the base for the build stage
-FROM gcr.io/google-cloud-sdk/cloud-sdk:slim AS data
+# Use official Google Cloud SDK image from Docker Hub instead of GCR
+FROM google/cloud-sdk:slim AS data
 
 # Download only the data
 RUN mkdir /data
