@@ -25,18 +25,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
-    - name: Install gsutil
-      if: runner.os != 'Windows'  # gsutil is pre-installed on Ubuntu and macOS
-      run: |
-        curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-455.0.0-linux-x86_64.tar.gz
-        tar -xf google-cloud-cli-455.0.0-linux-x86_64.tar.gz
-        ./google-cloud-sdk/install.sh --quiet
-        echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
-
-    - name: Install gsutil (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        choco install gsutil
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
 
     - name: Download data
       run: |
