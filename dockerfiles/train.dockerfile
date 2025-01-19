@@ -19,7 +19,6 @@ COPY requirements_dev.txt requirements_dev.txt
 COPY README.md README.md
 COPY pyproject.toml pyproject.toml
 
-# Copy data from the data stage
 COPY --from=data /data data/
 RUN mkdir models
 RUN mkdir -p reports/figures
