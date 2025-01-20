@@ -5,13 +5,15 @@ RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-COPY src src/
-COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-COPY README.md README.md
-COPY pyproject.toml pyproject.toml
+WORKDIR /app
+COPY ./src /app/src/
+COPY ./configs /app/configs/
+COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements_dev.txt /app/requirements_dev.txt
+COPY ./README.md /app/README.md
+COPY ./pyproject.toml /app/pyproject.toml
 
 RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
-ENTRYPOINT ["uvicorn", "src/rice_classification/api:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "src.rice_classification.api:app", "--host", "0.0.0.0", "--port", "80"]
