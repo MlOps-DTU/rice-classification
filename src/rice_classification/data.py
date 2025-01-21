@@ -5,6 +5,9 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Subset
 import hydra
 from loguru import logger
+import subprocess
+import zipfile
+
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
@@ -17,12 +20,13 @@ def main(cfg) -> None:
     Args:
         cfg: Configuration object containing parameters for data processing.
     The function performs the following steps:
-    1. Defines transformations for the images including resizing, converting to tensor, and normalizing.
-    2. Loads the dataset from the specified raw data directory.
-    3. Retrieves the labels from the dataset.
-    4. Splits the dataset into training and testing sets while ensuring class balance.
-    5. Creates subsets for training and testing data.
-    6. Saves the processed training and testing data to the specified processed data directory.
+    1. Checks if the raw data directory exists. If not, it downloads and unzips the raw data.
+    2. Defines transformations for the images including resizing, converting to tensor, and normalizing.
+    3. Loads the dataset from the specified raw data directory.
+    4. Retrieves the labels from the dataset.
+    5. Splits the dataset into training and testing sets while ensuring class balance.
+    6. Creates subsets for training and testing data.
+    7. Saves the processed training and testing data to the specified processed data directory.
     """
 
     # Define transformations for the images
@@ -33,6 +37,12 @@ def main(cfg) -> None:
             transforms.Normalize(mean=[0.5], std=[0.5]),
         ]
     )
+
+    if not os.path.isdir("data/raw"):
+        logger.info("The raw data directory does not exist and will be downloaded first.")
+        run_dvc_pull()
+        # Unzip the raw data
+        unzip_file(cfg.parameters.zip_file_path, cfg.parameters.raw_dir)
 
     # Load the dataset
     logger.info("The dataset is loaded from the raw data directory.")
@@ -70,12 +80,64 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
         tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
             A tuple containing the training dataset and the testing dataset.
     """
-    logger.info("The datasets are loaded from the processed data directory.")
+    data_path_processed = "data/processed"
+    os.makedirs(data_path_processed, exist_ok=True)
+    # Build the destination file path
+    destination_file_name_train = os.path.join(data_path_processed, "train.pt")
+    destination_file_name_test = os.path.join(data_path_processed, "test.pt")
+
+    if os.path.exists(destination_file_name_train) and os.path.exists(destination_file_name_test):
+        logger.info("The datasets are loaded from the processed data directory.")  
+    else:
+        logger.info("The datasets are not found in the processed data directory and will be downloaded first")
+        run_dvc_pull()
+    
     train_set = torch.load("data/processed/train.pt", weights_only=False)
     test_set = torch.load("data/processed/test.pt", weights_only=False)
-
     return train_set, test_set
 
+def run_dvc_pull():
+    """
+    Executes the `dvc pull` command to fetch data from the remote storage.
+
+    This function runs the `dvc pull` command using the subprocess module to
+    ensure that the data files tracked by DVC (Data Version Control) are
+    up-to-date with the remote storage. If the command fails, an error is
+    logged.
+
+    Raises:
+        subprocess.CalledProcessError: If the `dvc pull` command fails.
+    """
+    try:
+        # Run the `dvc pull` command
+        subprocess.run(["dvc", "pull", "-v"], check=True)
+    except subprocess.CalledProcessError as e:
+        logger.error(f"DVC Pull Failed: {e}")
+
+def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
+    """
+    Unzips a specified zip file to a given directory.
+    Parameters:
+    zip_file_path (str): The path to the zip file to be extracted. Default is "data/raw/Arborio.zip".
+    extract_to_path (str): The directory where the contents of the zip file will be extracted. Default is "data/raw_unzipped".
+    Returns:
+    None
+    """
+    try:
+        # Ensure the output directory exists
+        os.makedirs(extract_to_path, exist_ok=True)
+        
+        # Open the zip file
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+            # Extract all contents
+            zip_ref.extractall(extract_to_path)
+            logger.info("The raw zip has succesfull been unpacked.")
+    except FileNotFoundError:
+        logger.error(f"Error: The file {zip_file_path} does not exist.")
+    except zipfile.BadZipFile:
+        logger.error(f"Error: The file {zip_file_path} is not a valid zip file.")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     main()
