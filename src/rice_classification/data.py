@@ -67,8 +67,8 @@ def main(cfg) -> None:
     processed_data_dir = f"{cfg.parameters.processed_dir}"
 
     logger.info("The dataset is saved to the processed data directory.")
-    torch.save(train, f"{processed_data_dir}/train.pt")
-    torch.save(test, f"{processed_data_dir}/test.pt")
+    torch.save(train, f"{processed_data_dir}/processed_data_train.pt")
+    torch.save(test, f"{processed_data_dir}/processed_data_test.pt")
 
 
 def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
@@ -83,8 +83,8 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     data_path_processed = "data/processed"
     os.makedirs(data_path_processed, exist_ok=True)
     # Build the destination file path
-    destination_file_name_train = os.path.join(data_path_processed, "train.pt")
-    destination_file_name_test = os.path.join(data_path_processed, "test.pt")
+    destination_file_name_train = os.path.join(data_path_processed, "processed_data_train.pt")
+    destination_file_name_test = os.path.join(data_path_processed, "processed_data_test.pt")
 
     if os.path.exists(destination_file_name_train) and os.path.exists(destination_file_name_test):
         logger.info("The datasets are loaded from the processed data directory.")  
@@ -92,8 +92,8 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
         run_dvc_pull()
     
-    train_set = torch.load("data/processed/train.pt", weights_only=False)
-    test_set = torch.load("data/processed/test.pt", weights_only=False)
+    train_set = torch.load("data/processed/processed_data_train.pt", weights_only=False)
+    test_set = torch.load("data/processed/processed_data_test.pt", weights_only=False)
     return train_set, test_set
 
 def run_dvc_pull():
@@ -114,7 +114,7 @@ def run_dvc_pull():
     except subprocess.CalledProcessError as e:
         logger.error(f"DVC Pull Failed: {e}")
 
-def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
+def unzip_file(zip_file_path="data/raw/data_raw_Arborio.zip", extract_to_path="data/raw_unzipped"):
     """
     Unzips a specified zip file to a given directory.
     Parameters:
