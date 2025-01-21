@@ -1,6 +1,46 @@
 outs:
-- md5: a82617a2f365b142aff69aea71a5ba6c.dir
-  size: 276847145
-  nfiles: 75004
-  hash: md5
+- hash: md5
   path: data
+  files:
+  - relpath: processed/data_processed_test.pt
+    md5: 8c3d2cd1da3c11bc70297ea262b35539
+    size: 4675732
+    cloud:
+      remote_storage:
+        etag: 08ed82ecacd4868b031001
+        version_id: '1737457172939117'
+  - relpath: processed/data_processed_test.pt:Zone.Identifier
+    md5: ff59987e6e74307a3db108974dd19282
+    size: 1506
+    cloud:
+      remote_storage:
+        etag: 08bbb38eaad4868b031001
+        version_id: '1737457167210939'
+  - relpath: processed/data_processed_train.pt
+    md5: 995404a50911eb0b0c6cee81fd884f82
+    size: 4822040
+    cloud:
+      remote_storage:
+        etag: 08bcf783acd4868b031001
+        version_id: '1737457171233724'
+  - relpath: processed/data_processed_train.pt:Zone.Identifier
+    md5: eb2260fa1d83420836b96dc483adc4ff
+    size: 1509
+    cloud:
+      remote_storage:
+        etag: 08dab38eaad4868b031001
+        version_id: '1737457167210970'
+  - relpath: raw/data_raw_Arborio.zip
+    md5: bae5e3683bb695a3ad1a53b087d25261
+    size: 228460157
+    cloud:
+      remote_storage:
+        etag: 08e4b0cfc9d4868b031001
+        version_id: '1737457233287268'
+  - relpath: raw/data_raw_Arborio.zip:Zone.Identifier
+    md5: cc0f389d2056f92f30e643b9d706b8f7
+    size: 1502
+    cloud:
+      remote_storage:
+        etag: 08c5d5c1a9d4868b031001
+        version_id: '1737457165953733'

@@ -1,10 +1,6 @@
 # Use official Google Cloud SDK image from Docker Hub instead of GCR
 FROM google/cloud-sdk:slim AS data
 
-# Download only the data
-RUN mkdir /data
-RUN gsutil cp -r gs://emils_mlops_data_bucket/data/* /data/
-
 # Main build stage
 FROM python:3.11-slim
 
@@ -19,7 +15,6 @@ COPY requirements_dev.txt requirements_dev.txt
 COPY README.md README.md
 COPY pyproject.toml pyproject.toml
 
-COPY --from=data /data data/
 RUN mkdir models
 RUN mkdir -p reports/figures
 
