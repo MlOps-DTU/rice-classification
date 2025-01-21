@@ -41,7 +41,6 @@ def main(cfg) -> None:
     6. Saves the trained model to the models folder.
     7. Plots and saves the training loss and accuracy curves.
     """
-    print("Training the rice classification model")
     logger.info("Training of the rice classification model has started")
 
     # Initialize the model and move it to the specified device
