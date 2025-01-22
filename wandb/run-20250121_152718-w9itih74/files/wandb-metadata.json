@@ -1,0 +1,43 @@
+{
+  "os":  "macOS-14.4-arm64-arm-64bit",
+  "python":  "CPython 3.11.8",
+  "startedAt":  "2025-01-21T12:27:19.508287Z",
+  "program":  "/Users/meliscemre/Desktop/DTU/2024-2025 Fall/Machine Learning Operations/rice-classification/src/rice_classification/train.py",
+  "codePath":  "src/rice_classification/train.py",
+  "git":  {
+    "remote":  "git@github.com:MlOps-DTU/rice-classification.git",
+    "commit":  "1fee3d089bed9e5442b5a77ae5883a070976484a"
+  },
+  "email":  "meliscemrea@gmail.com",
+  "root":  "/Users/meliscemre/Desktop/DTU/2024-2025 Fall/Machine Learning Operations/rice-classification",
+  "host":  "Meliss-MacBook-Air.local",
+  "executable":  "/Users/meliscemre/anaconda3/envs/mlo/bin/python",
+  "codePathLocal":  "src/rice_classification/train.py",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "245107195904",
+      "used":  "196460138496"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "245107195904",
+      "used":  "196460138496"
+    }
+  },
+  "memory":  {
+    "total":  "17179869184"
+  },
+  "cpu":  {
+    "count":  8,
+    "countLogical":  8
+  },
+  "apple":  {
+    "name":  "Apple M1",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  7,
+    "memoryGb":  16,
+    "ramTotalBytes":  "17179869184"
+  }
+}
