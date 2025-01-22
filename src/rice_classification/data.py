@@ -111,6 +111,7 @@ def run_dvc_pull():
     except subprocess.CalledProcessError as e:
         logger.error(f"DVC Pull Failed: {e}")
 
+
 def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
     """
     Unzips a specified zip file to a given directory.
