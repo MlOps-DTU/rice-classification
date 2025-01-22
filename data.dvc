@@ -1,6 +1,25 @@
 outs:
-- md5: 856e7b0e1756c57b2910ff79a734b546.dir
-  size: 238364521
-  nfiles: 3
-  hash: md5
+- hash: md5
   path: data
+  files:
+  - relpath: processed/test.pt
+    md5: dc1f76a5524a03cdd8815ffcd038ee3a
+    size: 4879508
+    cloud:
+      remote_storage:
+        etag: 08edf8e9cdd8898b031001
+        version_id: '1737561395068013'
+  - relpath: processed/train.pt
+    md5: 574be7d25eba044711a764f5facdc54f
+    size: 5024856
+    cloud:
+      remote_storage:
+        etag: 0884ecc0ced8898b031001
+        version_id: '1737561396491780'
+  - relpath: raw/Arborio.zip
+    md5: bae5e3683bb695a3ad1a53b087d25261
+    size: 228460157
+    cloud:
+      remote_storage:
+        etag: 08b5c7f7e5d8898b031001
+        version_id: '1737561445622709'
