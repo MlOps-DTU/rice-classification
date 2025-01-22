@@ -91,7 +91,7 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
         run_dvc_pull()
-    
+
     train_set = torch.load("data/processed/train.pt", weights_only=False)
     test_set = torch.load("data/processed/test.pt", weights_only=False)
     return train_set, test_set
@@ -114,6 +114,7 @@ def run_dvc_pull():
         subprocess.run(["dvc", "pull", "-v"], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"DVC Pull Failed: {e}")
+
 
 def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
     """
