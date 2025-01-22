@@ -2,4 +2,3 @@ pytest
 torchvision
 numpy
 ruff
-
