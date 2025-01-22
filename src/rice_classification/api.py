@@ -6,7 +6,7 @@ import wandb
 import torchvision.transforms as transforms
 from loguru import logger
 import os
-from src.rice_classification.model import RiceClassificationModel
+from rice_classification.model import RiceClassificationModel
 from dotenv import load_dotenv
 from datetime import datetime
 import pytz

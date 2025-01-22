@@ -7,12 +7,10 @@ RUN apt update && \
 
 WORKDIR /app
 COPY ./src /app/src/
-COPY ./configs /app/configs/
 COPY ./requirements.txt /app/requirements.txt
-COPY ./requirements_dev.txt /app/requirements_dev.txt
-COPY ./README.md /app/README.md
-COPY ./pyproject.toml /app/pyproject.toml
-
+COPY requirements_dev.txt requirements_dev.txt
+COPY README.md README.md
+COPY pyproject.toml pyproject.toml
 RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
