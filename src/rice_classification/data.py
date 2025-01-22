@@ -87,7 +87,7 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     destination_file_name_test = os.path.join(data_path_processed, "test.pt")
 
     if os.path.exists(destination_file_name_train) and os.path.exists(destination_file_name_test):
-        logger.info("The datasets are loaded from the processed data directory.")  
+        logger.info("The datasets are loaded from the processed data directory.")
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
         run_dvc_pull()
@@ -95,6 +95,7 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     train_set = torch.load("data/processed/train.pt", weights_only=False)
     test_set = torch.load("data/processed/test.pt", weights_only=False)
     return train_set, test_set
+
 
 def run_dvc_pull():
     """
@@ -126,9 +127,9 @@ def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_u
     try:
         # Ensure the output directory exists
         os.makedirs(extract_to_path, exist_ok=True)
-        
+
         # Open the zip file
-        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
             # Extract all contents
             zip_ref.extractall(extract_to_path)
             logger.info("The raw zip has succesfull been unpacked.")
@@ -138,6 +139,7 @@ def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_u
         logger.error(f"Error: The file {zip_file_path} is not a valid zip file.")
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
+
 
 if __name__ == "__main__":
     main()

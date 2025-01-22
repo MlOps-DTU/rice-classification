@@ -1,0 +1,4 @@
+parameters:
+  num_classes: 5
+  model_path: models/rice_model.pth
+  batch_size: 32

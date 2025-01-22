@@ -3,25 +3,24 @@ import os
 import torch
 import numpy as np
 
-import pandas as pd
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
-import torch
 
 
 BUCKET_NAME = "emils_mlops_data_bucket"
 source_blob_name = "path/in/bucket/your_file.pt"
 destination_dir = "data/processed"
 
+
 def extract_features_batch(images):
     """Extract basic image features from a batch of images."""
     avg_brightness = np.mean(images, axis=(1, 2))  # Mean along the height and width axes
     contrast = np.std(images, axis=(1, 2))  # Standard deviation along the height and width axes
     sharpness = np.mean(np.abs(np.gradient(images, axis=(1, 2))), axis=(1, 2))  # Approximate sharpness
-    
+
     return avg_brightness, contrast, sharpness
 
-def download_from_gcs_if_not_exists(bucket_name, source_blob_name="train.pt", destination_dir = "data/processed"):
+
+def download_from_gcs_if_not_exists(bucket_name, source_blob_name="train.pt", destination_dir="data/processed"):
     # Ensure the destination directory exists
     os.makedirs(destination_dir, exist_ok=True)
 
