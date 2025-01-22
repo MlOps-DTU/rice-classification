@@ -2,7 +2,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import pytest
-from src.rice_classification.model import RiceClassificationModel
+from rice_classification.model import RiceClassificationModel
 
 
 def test_model_construction():
