@@ -80,17 +80,13 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
         tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
             A tuple containing the training dataset and the testing dataset.
     """
+    data_path_unzipped = "data/raw_unzipped"
     data_path_processed = "data/processed"
-    os.makedirs(data_path_processed, exist_ok=True)
-    # Build the destination file path
-    destination_file_name_train = os.path.join(data_path_processed, "train.pt")
-    destination_file_name_test = os.path.join(data_path_processed, "test.pt")
-
-    if os.path.exists(destination_file_name_train) and os.path.exists(destination_file_name_test):
+    if os.path.exists(data_path_unzipped) and os.path.exists(data_path_processed)  :
         logger.info("The datasets are loaded from the processed data directory.")
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
-        run_dvc_pull()
+        main()
     
     train_set = torch.load("data/processed/train.pt", weights_only=False)
     test_set = torch.load("data/processed/test.pt", weights_only=False)
@@ -114,6 +110,7 @@ def run_dvc_pull():
         subprocess.run(["dvc", "pull", "-v"], check=True)
     except subprocess.CalledProcessError as e:
         logger.error(f"DVC Pull Failed: {e}")
+
 
 def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
     """
