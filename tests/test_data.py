@@ -6,7 +6,6 @@ from torch.utils.data import Subset
 from rice_classification.data import main, get_rice_pictures
 
 
-
 @pytest.fixture
 def setup_data():
     RAW_DIR = os.path.join("data", "raw")
