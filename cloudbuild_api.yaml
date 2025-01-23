@@ -27,7 +27,7 @@ steps:
     'europe-west1',
     '--platform',
     'managed',
-    '--memory==1024Mi',
+    '--memory=1024Mi',
     '--update-secrets=WANDB_API_KEY=WANDB_API_KEY:latest',
   ]
 options:
