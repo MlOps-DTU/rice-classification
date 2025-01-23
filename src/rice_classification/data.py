@@ -7,9 +7,10 @@ import hydra
 import torch
 from loguru import logger
 import numpy as np
+import random
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from torch.utils.data import Subset
+from torch.utils.data import Subset, DataLoader
 from torchvision import datasets, transforms
 
 # Add a logger to the script that logs messages to a file
@@ -134,24 +135,24 @@ def run_gbucket() -> None:
     print("All files downloaded successfully.")
 
 
-def run_dvc_pull() -> None:
-    """
-    Executes the `dvc pull` command to fetch data from the remote storage.
+# def run_dvc_pull() -> None:
+#     """
+#     Executes the `dvc pull` command to fetch data from the remote storage.
 
-    Parameters:
-        None
+#     Parameters:
+#         None
 
-    Returns:
-        None
+#     Returns:
+#         None
 
-    Raises:
-        subprocess.CalledProcessError: If the `dvc pull` command fails.
-    """
-    try:
-        # Run the `dvc pull` command
-        subprocess.run(["dvc", "pull", "-v"], check=True)
-    except subprocess.CalledProcessError as e:
-        logger.error(f"DVC Pull Failed: {e}")
+#     Raises:
+#         subprocess.CalledProcessError: If the `dvc pull` command fails.
+#     """
+#     try:
+#         # Run the `dvc pull` command
+#         subprocess.run(["dvc", "pull", "-v"], check=True)
+#     except subprocess.CalledProcessError as e:
+#         logger.error(f"DVC Pull Failed: {e}")
 
 
 def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str = "data/raw_unzipped") -> None:
@@ -240,6 +241,58 @@ def extract_features_batch(images):
     sharpness = np.mean(np.sqrt(gradients[0]**2 + gradients[1]**2), axis=(1, 2, 3))
 
     return avg_brightness, contrast, sharpness
+
+def upload_to_bucket(source_file_name):
+    """
+    Uploads a file to a Google Cloud Storage bucket.
+
+    Args:
+        source_file_name (str): The path to the file to upload.
+    """
+    # Define the bucket name and the object name
+    bucket_name = 'emils_mlops_data_bucket'
+    destination_blob_name = 'data/processed/metric.csv'
+
+    # Initialize a client
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    # Upload the file
+    blob.upload_from_filename(source_file_name)
+    print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+def process_and_save_metrics():
+    """
+    Creates a DataLoader from the dataset, processes the images, saves the metrics to a CSV file,
+    and uploads the CSV file to a Google Cloud Storage bucket.
+    """
+    # Define the save path for the CSV file
+    save_path = "data/processed/metric.csv"
+    
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    
+    # Load the dataset
+    data = torch.load("data/processed/train.pt", weights_only=False)
+
+    # Define a subset (e.g., first 500 samples or random samples)
+    subset_size = 2000
+    subset_indices = random.sample(range(len(data)), subset_size) 
+    subset_data = Subset(data, subset_indices)
+    
+    # Create a DataLoader
+    data_loader = DataLoader(subset_data, batch_size=32, shuffle=False)
+
+    # Extract metrics from images
+    metrics_df = metrics_from_images(data_loader)
+    
+    # Save the DataFrame to a CSV file
+    metrics_df.to_csv(save_path, index=False)
+    print(f"Metrics saved to {save_path}")
+
+    # Upload the CSV file to the cloud bucket
+    upload_to_bucket(save_path)
 
 if __name__ == "__main__":
     main()
