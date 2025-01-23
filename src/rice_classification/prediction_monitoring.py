@@ -49,5 +49,4 @@ labels = []
 # Create a DataLoader to iterate through the dataset
 data_loader = DataLoader(train_data, batch_size=32, shuffle=False)
 
-
 print(labels)
