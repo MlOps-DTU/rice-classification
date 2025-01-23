@@ -1,5 +1,7 @@
 from unittest.mock import MagicMock
 
+from unittest.mock import MagicMock
+
 import pytest
 import torch
 from fastapi.testclient import TestClient
