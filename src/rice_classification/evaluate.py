@@ -1,9 +1,11 @@
+import os
+
+import hydra
 import torch
+from loguru import logger
+
 from rice_classification.data import get_rice_pictures
 from rice_classification.model import RiceClassificationModel
-import hydra
-from loguru import logger
-import os
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
@@ -15,6 +17,9 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.ba
 def main(cfg) -> None:
     """
     Main function to evaluate the rice classification model.
+
+    Parameters:
+        cfg: Configuration object containing parameters for the evaluation process.
 
     Args:
         cfg: Configuration object containing parameters for the evaluation process.
@@ -33,7 +38,7 @@ def main(cfg) -> None:
 
     # Specify the model and move it to the appropriate device
     logger.info("A model is initialized for evaluation.")
-    model = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
+    model: torch.nn.Module = RiceClassificationModel(num_classes=cfg.parameters.num_classes).to(DEVICE)
 
     # Load the model weights from the already trained model
     logger.info("The trained model is loaded for evaluation.")
@@ -41,13 +46,14 @@ def main(cfg) -> None:
 
     # Load the test set
     _, test_set = get_rice_pictures()
-    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=cfg.parameters.batch_size)
+    test_dataloader: torch.utils.data.DataLoader = torch.utils.data.DataLoader(test_set, batch_size=cfg.parameters.batch_size)
 
     # Set the model to evaluation mode
     model.eval()
 
     # Evaluate the model
-    correct, total = 0, 0
+    correct: float = 0
+    total: int = 0
     with torch.no_grad():
         for img, target in test_dataloader:
             img, target = img.to(DEVICE), target.to(DEVICE)
@@ -56,9 +62,9 @@ def main(cfg) -> None:
             total += target.size(0)
 
     # Calculate the accuracy
-    accuracy = correct / total
+    accuracy: float = correct / total
     logger.info(f"The test accuracy is {accuracy:.4f}")
-    print(f"Test accuracy: {correct / total:.4f}")
+    print(f"Test accuracy: {accuracy:.4f}")
 
 
 if __name__ == "__main__":

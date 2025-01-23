@@ -1,8 +1,10 @@
 import os
+
+
 import pytest
 import torch
-from torchvision import datasets
 from torch.utils.data import Subset
+from torchvision import datasets
 from src.rice_classification.data import main, get_rice_pictures
 
 

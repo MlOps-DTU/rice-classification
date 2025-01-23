@@ -1,14 +1,15 @@
+import os
+
+import hydra
 import matplotlib.pyplot as plt
 import torch
-from rice_classification.data import get_rice_pictures
-from rice_classification.model import RiceClassificationModel
-import hydra
-from loguru import logger
 from dotenv import load_dotenv
-import os
-import wandb
+from loguru import logger
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
+import wandb
+from rice_classification.data import get_rice_pictures
+from rice_classification.model import RiceClassificationModel
 
 # Load environment variables
 load_dotenv()
@@ -25,9 +26,12 @@ def main(cfg) -> None:
     """
     Train the rice classification model.
 
-    Args:
+    Parameters:
         cfg: Configuration object containing parameters for training, such as
              number of classes, batch size, number of epochs, and optimizer settings.
+
+    Args:
+        cfg: Configuration object containing parameters for training.
 
     Returns:
         None

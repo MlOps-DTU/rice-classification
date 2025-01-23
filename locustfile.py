@@ -1,5 +1,6 @@
-from locust import HttpUser, task, between
 import os
+
+from locust import HttpUser, between, task
 
 
 class RiceClassificationUser(HttpUser):

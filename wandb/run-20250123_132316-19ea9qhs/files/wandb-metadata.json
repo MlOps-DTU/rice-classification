@@ -1,0 +1,29 @@
+{
+  "os":  "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python":  "CPython 3.11.11",
+  "startedAt":  "2025-01-23T12:23:17.723425Z",
+  "program":  "/home/emiltoft/anaconda3/envs/my_environment/bin/train",
+  "git":  {
+    "remote":  "https://github.com/MlOps-DTU/rice-classification-.git",
+    "commit":  "4cfa52263e1c5662f035ff6a2ebd0560d272cb0a"
+  },
+  "email":  "emilkraghtoft97@gmail.com",
+  "root":  "/home/emiltoft/Project/rice-classification-",
+  "host":  "DELLPCDK",
+  "executable":  "/home/emiltoft/anaconda3/envs/my_environment/bin/python",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "1081101176832",
+      "used":  "29351571456"
+    }
+  },
+  "memory":  {
+    "total":  "3995099136"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  }
+}
