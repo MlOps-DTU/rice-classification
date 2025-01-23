@@ -80,7 +80,7 @@ def main(cfg: dict) -> None:
     torch.save(test, f"{processed_data_dir}/test.pt")
 
 
-def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+def get_rice_pictures(cfg: dict) -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
     """
     Loads and returns the training and testing datasets for rice classification.
 
@@ -97,7 +97,7 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
         logger.info("The datasets are loaded from the processed data directory.")
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
-        main()
+        main(cfg)
 
     train_set: torch.utils.data.Dataset = torch.load("data/processed/train.pt", weights_only=False)
     test_set: torch.utils.data.Dataset = torch.load("data/processed/test.pt", weights_only=False)
