@@ -200,7 +200,6 @@ We used `ruff` for linting and `ruff` for formatting our code. We also used `myp
 
 These concepts are important in larger projects, so make sure that the code is easy to understand for other programmers. In large projects many people work on projects, and by following the same formatting standard the code becomes easier to read for people who knows this style standard. Furthermore, by using typing it is easier to follow the code, and documentation again serve as a tool to make it easier to understand what the code does. All these steps, serve to make code more understandable and easy to work on if it is the first time you see it.
 
-
 ## Version control
 
 > In the following section we are interested in how version control was used in your project during development to

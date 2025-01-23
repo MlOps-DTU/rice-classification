@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt --no-cache-dir --verbose
 RUN pip install -r requirements_dev.txt --no-cache-dir --verbose
 RUN pip install . --no-deps --no-cache-dir --verbose
 
-ENTRYPOINT ["uvicorn", "src.rice_classification.monitoring:app", "--host", "0.0.0.0", "--port", "80"]
+ENTRYPOINT ["uvicorn", "src.rice_classification.monitoring:app", "--host", "0.0.0.0", "--port", "8080"]
