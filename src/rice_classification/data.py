@@ -2,9 +2,12 @@ import os
 import subprocess
 import zipfile
 
+from google.cloud import storage
 import hydra
 import torch
 from loguru import logger
+import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Subset
 from torchvision import datasets, transforms
@@ -43,7 +46,7 @@ def main(cfg: dict) -> None:
 
     if not os.path.isdir("data/raw"):
         logger.info("The raw data directory does not exist and will be downloaded first.")
-        run_dvc_pull()
+        run_gbucket()
         # Unzip the raw data
         unzip_file(cfg.parameters.zip_file_path, cfg.parameters.raw_dir)
 
@@ -70,6 +73,7 @@ def main(cfg: dict) -> None:
     test: Subset = Subset(dataset, test_indices)
 
     processed_data_dir: str = f"{cfg.parameters.processed_dir}"
+    os.makedirs(processed_data_dir, exist_ok=True)
 
     logger.info("The dataset is saved to the processed data directory.")
     torch.save(train, f"{processed_data_dir}/train.pt")
@@ -98,6 +102,36 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     train_set: torch.utils.data.Dataset = torch.load("data/processed/train.pt", weights_only=False)
     test_set: torch.utils.data.Dataset = torch.load("data/processed/test.pt", weights_only=False)
     return train_set, test_set
+
+
+def run_gbucket() -> None:
+    # Initialize a client
+    client = storage.Client()
+
+    # Define the bucket name and the object name
+    bucket_name = 'emils_mlops_data_bucket'
+    folder_name  = 'data/raw/'
+    destination_dir = 'data/raw'
+
+    # Ensure the destination directory exists
+    os.makedirs(destination_dir, exist_ok=True)
+
+    # Get the bucket and the blob
+    bucket = client.bucket(bucket_name)
+    
+    # List all the blobs in the specified folder
+    blobs = bucket.list_blobs(prefix=folder_name)
+
+    print("Downloading files from the 'raw' folder:")
+    for blob in blobs:
+        # Define the local file path
+        local_file_path = os.path.join(destination_dir, os.path.basename(blob.name))
+        
+        # Download the blob to the local file
+        blob.download_to_filename(local_file_path)
+        print(f"Downloaded {blob.name} to {local_file_path}")
+
+    print("All files downloaded successfully.")
 
 
 def run_dvc_pull() -> None:
@@ -147,6 +181,65 @@ def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
 
+def metrics_from_images(data_loader):
+    """
+    Processes a PyTorch DataLoader of images, extracts features in a batch, and converts them into a DataFrame.
+
+    Args:
+        data_loader (DataLoader): A DataLoader object containing the dataset of images and labels.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing extracted image features and target labels.
+    """
+    # Prepare lists to store features and labels
+    avg_brightness_list, contrast_list, sharpness_list = [], [], []
+    labels_list = []
+
+    # Iterate through the DataLoader
+    for images, labels in data_loader:
+        # Convert images to NumPy arrays if they are PyTorch tensors
+        images_np = images.numpy() if torch.is_tensor(images) else images
+
+        # Extract features for the entire batch at once
+        avg_brightness, contrast, sharpness = extract_features_batch(images_np)
+
+        # Append features and labels
+        avg_brightness_list.extend(avg_brightness)
+        contrast_list.extend(contrast)
+        sharpness_list.extend(sharpness)
+        labels_list.extend(labels.tolist())
+    
+    # Create a DataFrame
+    dataframe = pd.DataFrame({
+        "avg_brightness": avg_brightness_list,
+        "contrast": contrast_list,
+        "sharpness": sharpness_list,
+        "target": labels_list
+    })
+    
+    return dataframe
+
+def extract_features_batch(images):
+    """
+    Extract basic image features for an entire batch using vectorized operations.
+
+    Args:
+        images (np.array): A batch of images as a NumPy array of shape (batch_size, height, width, channels).
+
+    Returns:
+        tuple: Three NumPy arrays representing avg_brightness, contrast, and sharpness for the batch.
+    """
+    # Average brightness: Mean pixel value along axes (1, 2, 3) for height, width and channels
+    avg_brightness = np.mean(images, axis=(1, 2, 3))
+
+    # Contrast: Standard deviation along axes (1, 2, 3) for height, width and channels
+    contrast = np.std(images, axis=(1, 2, 3))
+
+    # Sharpness: Mean of absolute gradient along height, width and channels
+    gradients = np.gradient(images, axis=(1, 2, 3))  # Gradient along , width and channels
+    sharpness = np.mean(np.sqrt(gradients[0]**2 + gradients[1]**2), axis=(1, 2, 3))
+
+    return avg_brightness, contrast, sharpness
 
 if __name__ == "__main__":
     main()
