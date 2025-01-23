@@ -82,12 +82,12 @@ def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Data
     """
     data_path_unzipped = "data/raw_unzipped"
     data_path_processed = "data/processed"
-    if os.path.exists(data_path_unzipped) and os.path.exists(data_path_processed)  :
+    if os.path.exists(data_path_unzipped) and os.path.exists(data_path_processed):
         logger.info("The datasets are loaded from the processed data directory.")
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
         main()
-    
+
     train_set = torch.load("data/processed/train.pt", weights_only=False)
     test_set = torch.load("data/processed/test.pt", weights_only=False)
     return train_set, test_set
