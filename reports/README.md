@@ -56,9 +56,9 @@ will check the repositories and the code to verify your answers.
 * [X] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
 * [X] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
-* [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8)
+* [X] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
+* [X] Do a bit of code typing and remember to document essential parts of your code (M7)
+* [X] Setup version control for your data or part of your data (M8)
 * [X] Add command line interfaces and project commands to your code where it makes sense (M9)
 * [X] Construct one or multiple docker files for your code (M10)
 * [X] Build the docker files locally and make sure they work as intended (M10)
@@ -74,7 +74,7 @@ will check the repositories and the code to verify your answers.
 
 * [X] Write unit tests related to the data part of your code (M16)
 * [X] Write unit tests related to model construction and or model training (M16)
-* [ ] Calculate the code coverage (M16)
+* [X] Calculate the code coverage (M16)
 * [X] Get some continuous integration running on the GitHub repository (M17)
 * [X] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
 * [X] Add a linting step to your continuous integration (M17)
@@ -82,8 +82,8 @@ will check the repositories and the code to verify your answers.
 * [ ] Add a continues workflow that triggers when data changes (M19)
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [X] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
-* [ ] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [X] Create a trigger workflow for automatically building your docker images (M21)
+* [X] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [X] Create a FastAPI application that can do inference using your model (M22)
 * [X] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [ ] Write API tests for your application and setup continues integration for these (M24)
@@ -106,10 +106,10 @@ will check the repositories and the code to verify your answers.
 
 * [ ] Write some documentation for your application (M32)
 * [ ] Publish the documentation to GitHub Pages (M32)
-* [ ] Revisit your initial project description. Did the project turn out as you wanted?
+* [X] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Create an architectural diagram over your MLOps pipeline
-* [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [X] Make sure all group members have an understanding about all parts of the project
+* [X] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -181,6 +181,8 @@ To manage dependencies in our project we made use of the package manager Conda. 
 
 From the cookiecutter template we have filled out configs folder, the data folder, the dockerfiles folder, the models folder (which we only used in the start), the reports folder, the src folder, the tests folder. We deleted the notebooks folder since we did not use any jupyter notebooks in our project. We added a .dvc folder that contains the config file for dvc, a wandb folder that contains files related to our runs saved on weights and biases. In addition we have a number of .yaml files and ignore files that are used to implement continous integreation of our training setup and our api.
 
+ Overall, all the code that relates to the model, training the model, evaluating the model, the api for inference and the api for data drifting is stored in src. All our tests are stored in the tests folder and contains tests for the model, the data pipeline and the inference api. The configs folder stores our hyperparameters and additional files can be used to create more experiments if needed. In that way we ensure that each experiment is reproducable, so we always know what hyperparameters we have used.
+
 ### Question 6
 
 > **Did you implement any rules for code quality and format? What about typing and documentation? Additionally,**
@@ -193,10 +195,11 @@ From the cookiecutter template we have filled out configs folder, the data folde
 > *concepts are important in larger projects because ... . For example, typing ...*
 >
 > Answer:
+We used `ruff` for linting and `ruff` for formatting our code. We also used `mypy` for typing and used key words such as `Parameters`, `Args` and `Return` when writting dogstring documentation for our functions. Overall, in the project we strived to document all our functions in the src folder both with dogstrings and a suitable amount of comments. We added two styling rules in `ruff`, one to manage the order of the imports and the other to ensure that no line extends a 120 characters.
 
-We implemented rules for code quality and formatting to ensure consistency. For both linting and formatting, we used Ruff. Ruff helped us detect and fix issues such as unused imports, PEP 8 violations, and unnecessary whitespace. We also used type hints to reduce the risk of type-related bugs. Additionally, we documented our code with clear docstrings in functions and classes to explain their purpose.
 
-These concepts are essential in larger projects because they often require collaboration among multiple team members. Consistent formatting makes the code clearer and easier to read, reducing misunderstandings between contributors. Documentation is important when new members join the team, as it helps them quickly understand the purpose of the code.
+These concepts are important in larger projects, so make sure that the code is easy to understand for other programmers. In large projects many people work on projects, and by following the same formatting standard the code becomes easier to read for people who knows this style standard. Furthermore, by using typing it is easier to follow the code, and documentation again serve as a tool to make it easier to understand what the code does. All these steps, serve to make code more understandable and easy to work on if it is the first time you see it.
+
 
 ## Version control
 
