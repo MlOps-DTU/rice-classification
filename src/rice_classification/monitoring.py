@@ -1,5 +1,4 @@
 import json
-import random
 from contextlib import asynccontextmanager
 
 import anyio
@@ -13,9 +12,6 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from google.cloud import storage
 from loguru import logger
-from torch.utils.data import DataLoader, Subset
-
-from rice_classification.data import get_rice_pictures
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
@@ -122,6 +118,28 @@ def extract_features_batch(images):
     return avg_brightness, contrast, sharpness
 
 
+def download_csv_from_bucket(bucket_name, source_blob_name, destination_file_name):
+    """
+    Downloads a CSV file from a Google Cloud Storage bucket.
+
+    Args:
+        bucket_name (str): The name of the bucket.
+        source_blob_name (str): The name of the blob in the bucket.
+        destination_file_name (str): The path where the CSV file will be saved locally.
+    """
+    # Initialize a client
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+
+    # Download the blob to a local file
+    blob.download_to_filename(destination_file_name)
+
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(destination_file_name)
+    return df
+
+
 def run_analysis(reference_data: pd.DataFrame, current_data: pd.DataFrame) -> None:
     """Run the analysis and return the report."""
     data_drift_report = Report(metrics=[DataDriftPreset(), DataQualityPreset(), TargetDriftPreset()])
@@ -134,23 +152,17 @@ async def lifespan(app: FastAPI):
     """Load and clean up model on startup and shutdown."""
     print("Loading Data")
 
+    bucket_name = "emils_mlops_data_bucket"
+    source_blob_name = "data/processed/metric.csv"
+    destination_file_name = "metric.csv"
+
     global train_metrics
-    #  Get data from the data module
-    training_data, _ = get_rice_pictures()
-
-    # Define a subset (e.g., first 500 samples or random samples)
-    subset_size = 2000
-    subset_indices = random.sample(range(len(training_data)), subset_size)
-    subset_data = Subset(training_data, subset_indices)
-
-    # Create a DataLoader for the subset
-    data_loader = DataLoader(subset_data, batch_size=256, shuffle=False)
-    train_metrics = metrics_from_images(data_loader)
+    train_metrics = download_csv_from_bucket(bucket_name, source_blob_name, destination_file_name)
 
     yield
     # Cleanup
     print("Cleaning up")
-    del training_data, train_metrics
+    del train_metrics
 
 
 app = FastAPI(lifespan=lifespan)
