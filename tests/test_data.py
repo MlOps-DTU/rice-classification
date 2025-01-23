@@ -2,8 +2,9 @@ import os
 
 import pytest
 from omegaconf import OmegaConf
-from rice_classification.data import get_rice_pictures
 from torch.utils.data import Subset
+
+from src.rice_classification.data import get_rice_pictures
 
 
 @pytest.fixture
