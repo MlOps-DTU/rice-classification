@@ -1,36 +1,39 @@
 import os
-import torch
-from torchvision import datasets, transforms
-from sklearn.model_selection import train_test_split
-from torch.utils.data import Subset
-import hydra
-from loguru import logger
 import subprocess
 import zipfile
 
+import hydra
+import torch
+from loguru import logger
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Subset
+from torchvision import datasets, transforms
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
 
 
 @hydra.main(config_path=f"{os.getcwd()}/configs", config_name="data.yaml", version_base=None)
-def main(cfg) -> None:
+def main(cfg: dict) -> None:
     """
     Process raw data and save it to the processed directory.
-    Args:
-        cfg: Configuration object containing parameters for data processing.
-    The function performs the following steps:
-    1. Checks if the raw data directory exists. If not, it downloads and unzips the raw data.
-    2. Defines transformations for the images including resizing, converting to tensor, and normalizing.
-    3. Loads the dataset from the specified raw data directory.
-    4. Retrieves the labels from the dataset.
-    5. Splits the dataset into training and testing sets while ensuring class balance.
-    6. Creates subsets for training and testing data.
-    7. Saves the processed training and testing data to the specified processed data directory.
-    """
 
+    Args:
+        cfg (dict): Configuration object containing parameters for data processing.
+
+    Parameters:
+        cfg.parameters.height (int): Height to resize the images.
+        cfg.parameters.width (int): Width to resize the images.
+        cfg.parameters.zip_file_path (str): Path to the zip file containing raw data.
+        cfg.parameters.raw_dir (str): Directory to store raw data.
+        cfg.parameters.test_size (float): Proportion of the dataset to include in the test split.
+        cfg.parameters.processed_dir (str): Directory to store processed data.
+
+    Returns:
+        None
+    """
     # Define transformations for the images
-    transform = transforms.Compose(
+    transform: transforms.Compose = transforms.Compose(
         [
             transforms.Resize((cfg.parameters.height, cfg.parameters.width)),
             transforms.ToTensor(),
@@ -46,14 +49,16 @@ def main(cfg) -> None:
 
     # Load the dataset
     logger.info("The dataset is loaded from the raw data directory.")
-    data_dir = f"{cfg.parameters.raw_dir}"
-    dataset = datasets.ImageFolder(root=data_dir, transform=transform)
+    data_dir: str = f"{cfg.parameters.raw_dir}"
+    dataset: datasets.ImageFolder = datasets.ImageFolder(root=data_dir, transform=transform)
 
     # Get the labels
-    targets = dataset.targets
+    targets: list[int] = dataset.targets
 
     # Split the dataset into training and testing sets
     logger.info("The dataset is split into training and testing sets.")
+    train_indices: list[int]
+    test_indices: list[int]
     train_indices, test_indices = train_test_split(
         range(len(dataset)),
         stratify=targets,  # Ensures class balance
@@ -61,10 +66,10 @@ def main(cfg) -> None:
     )
 
     # Create subsets directly
-    train = Subset(dataset, train_indices)
-    test = Subset(dataset, test_indices)
+    train: Subset = Subset(dataset, train_indices)
+    test: Subset = Subset(dataset, test_indices)
 
-    processed_data_dir = f"{cfg.parameters.processed_dir}"
+    processed_data_dir: str = f"{cfg.parameters.processed_dir}"
 
     logger.info("The dataset is saved to the processed data directory.")
     torch.save(train, f"{processed_data_dir}/train.pt")
@@ -74,33 +79,36 @@ def main(cfg) -> None:
 def get_rice_pictures() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
     """
     Loads and returns the training and testing datasets for rice classification.
-    The function loads the datasets from preprocessed files located at
-    "../../data/processed/train.pt" and "../../data/processed/test.pt".
+
+    Parameters:
+        None
+
     Returns:
         tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
             A tuple containing the training dataset and the testing dataset.
     """
-    data_path_unzipped = "data/raw_unzipped"
-    data_path_processed = "data/processed"
+    data_path_unzipped: str = "data/raw_unzipped"
+    data_path_processed: str = "data/processed"
     if os.path.exists(data_path_unzipped) and os.path.exists(data_path_processed):
         logger.info("The datasets are loaded from the processed data directory.")
     else:
         logger.info("The datasets are not found in the processed data directory and will be downloaded first")
         main()
 
-    train_set = torch.load("data/processed/train.pt", weights_only=False)
-    test_set = torch.load("data/processed/test.pt", weights_only=False)
+    train_set: torch.utils.data.Dataset = torch.load("data/processed/train.pt", weights_only=False)
+    test_set: torch.utils.data.Dataset = torch.load("data/processed/test.pt", weights_only=False)
     return train_set, test_set
 
 
-def run_dvc_pull():
+def run_dvc_pull() -> None:
     """
     Executes the `dvc pull` command to fetch data from the remote storage.
 
-    This function runs the `dvc pull` command using the subprocess module to
-    ensure that the data files tracked by DVC (Data Version Control) are
-    up-to-date with the remote storage. If the command fails, an error is
-    logged.
+    Parameters:
+        None
+
+    Returns:
+        None
 
     Raises:
         subprocess.CalledProcessError: If the `dvc pull` command fails.
@@ -112,14 +120,16 @@ def run_dvc_pull():
         logger.error(f"DVC Pull Failed: {e}")
 
 
-def unzip_file(zip_file_path="data/raw/Arborio.zip", extract_to_path="data/raw_unzipped"):
+def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str = "data/raw_unzipped") -> None:
     """
     Unzips a specified zip file to a given directory.
+
     Parameters:
-    zip_file_path (str): The path to the zip file to be extracted. Default is "data/raw/Arborio.zip".
-    extract_to_path (str): The directory where the contents of the zip file will be extracted. Default is "data/raw_unzipped".
+        zip_file_path (str): The path to the zip file to be extracted. Default is "data/raw/Arborio.zip".
+        extract_to_path (str): The directory where the contents of the zip file will be extracted. Default is "data/raw_unzipped".
+
     Returns:
-    None
+        None
     """
     try:
         # Ensure the output directory exists

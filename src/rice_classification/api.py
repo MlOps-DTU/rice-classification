@@ -1,18 +1,20 @@
-from contextlib import asynccontextmanager
-import torch
-from fastapi import FastAPI, File, UploadFile, BackgroundTasks
-from PIL import Image
-import wandb
-import torchvision.transforms as transforms
-from loguru import logger
-import os
-from rice_classification.model import RiceClassificationModel
-from dotenv import load_dotenv
-from datetime import datetime
-import pytz
-import numpy as np
-from google.cloud import storage
 import json
+import os
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import numpy as np
+import pytz
+import torch
+import torchvision.transforms as transforms
+from dotenv import load_dotenv
+from fastapi import BackgroundTasks, FastAPI, File, UploadFile
+from google.cloud import storage
+from loguru import logger
+from PIL import Image
+
+import wandb
+from rice_classification.model import RiceClassificationModel
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
@@ -27,7 +29,15 @@ BUCKET_NAME = "prediction_meta_data"
 
 
 def extract_features(images):
-    """Extract basic image features from a set of images."""
+    """
+    Extract basic image features from a set of images.
+
+    Parameters:
+    images (list): List of images to extract features from.
+
+    Returns:
+    np.array: Array of extracted features.
+    """
     features = []
     for img in images:
         avg_brightness = np.mean(img)
@@ -39,7 +49,18 @@ def extract_features(images):
 
 # Save prediction results to GCP
 def save_prediction_to_gcp(avg_brightness: float, contrast: float, sharpness: float, label: int):
-    """Save the prediction results to GCP bucket."""
+    """
+    Save the prediction results to GCP bucket.
+
+    Parameters:
+    avg_brightness (float): Average brightness of the image.
+    contrast (float): Contrast of the image.
+    sharpness (float): Sharpness of the image.
+    label (int): Predicted label of the image.
+
+    Returns:
+    None
+    """
     client = storage.Client()
     bucket = client.bucket(BUCKET_NAME)
     copenhagen_tz = pytz.timezone("Europe/Copenhagen")
@@ -59,7 +80,15 @@ def save_prediction_to_gcp(avg_brightness: float, contrast: float, sharpness: fl
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load and clean up model on startup and shutdown."""
+    """
+    Load and clean up model on startup and shutdown.
+
+    Parameters:
+    app (FastAPI): FastAPI application instance.
+
+    Returns:
+    None
+    """
     print("Loading model")
 
     # Initialize a new run
@@ -113,7 +142,12 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def read_root():
-    """Root endpoint."""
+    """
+    Root endpoint.
+
+    Returns:
+    dict: Welcome message.
+    """
     return {"Hello and welcome to the rice classification app!"}
 
 
@@ -122,7 +156,16 @@ async def predict(
     background_tasks: BackgroundTasks,
     data: UploadFile = File(...),
 ):
-    """Make a prediction for an uploaded image."""
+    """
+    Make a prediction for an uploaded image.
+
+    Parameters:
+    background_tasks (BackgroundTasks): Background tasks for saving prediction.
+    data (UploadFile): Uploaded image file.
+
+    Returns:
+    dict: Prediction result.
+    """
     # Access the model and transform from app.state
     model = app.state.model
     transform = app.state.transform

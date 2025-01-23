@@ -1,7 +1,8 @@
-import torch
-import torch.optim as optim
-import torch.nn as nn
 import pytest
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
 from rice_classification.model import RiceClassificationModel
 
 

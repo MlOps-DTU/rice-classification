@@ -1,5 +1,6 @@
-from rice_classification.data import get_rice_pictures
 import torch
+
+from rice_classification.data import get_rice_pictures
 
 train_set, _ = get_rice_pictures()
 

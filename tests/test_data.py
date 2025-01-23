@@ -1,9 +1,11 @@
 import os
+
 import pytest
 import torch
-from torchvision import datasets
 from torch.utils.data import Subset
-from rice_classification.data import main, get_rice_pictures
+from torchvision import datasets
+
+from rice_classification.data import get_rice_pictures, main
 
 
 @pytest.fixture

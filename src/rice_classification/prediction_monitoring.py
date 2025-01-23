@@ -1,10 +1,9 @@
-from google.cloud import storage
 import os
-import torch
+
 import numpy as np
-
+import torch
+from google.cloud import storage
 from torch.utils.data import DataLoader
-
 
 BUCKET_NAME = "emils_mlops_data_bucket"
 source_blob_name = "path/in/bucket/your_file.pt"
