@@ -66,7 +66,7 @@ async def lifespan(app: FastAPI):
     run = wandb.init()
 
     # Use the specified artifact
-    artifact = run.use_artifact("dtumlops25/rice-classification/rice_classification_model:v2", type="model")
+    artifact = run.use_artifact("dtumlops25/rice-classification/rice_classification_model:latest", type="model")
 
     # Download the artifact
     artifact_dir = artifact.download()
