@@ -1,7 +1,11 @@
-import pytest
-from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
+
+from unittest.mock import MagicMock
+
+import pytest
 import torch
+
+from fastapi.testclient import TestClient
 from src.rice_classification.api import app
 import torchvision.transforms as transforms
 

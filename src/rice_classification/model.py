@@ -1,5 +1,5 @@
 import torch
-from torch import nn
+from torch import Tensor, nn
 
 
 class RiceClassificationModel(nn.Module):
@@ -18,16 +18,17 @@ class RiceClassificationModel(nn.Module):
         fc1 (nn.Linear): First fully connected layer with input size 128*6*6 and output size 256.
         fc2 (nn.Linear): Second fully connected layer with input size 256 and output size num_classes.
 
-    Methods:
-        forward(x: torch.Tensor) -> torch.Tensor:
-            Defines the forward pass of the model.
-            Args:
-                x (torch.Tensor): Input tensor representing a batch of images.
-            Returns:
-                torch.Tensor: Output tensor representing the class scores for each image in the batch.
+    Parameters:
+        num_classes (int): Number of output classes for classification.
     """
 
     def __init__(self, num_classes: int) -> None:
+        """
+        Initialize the RiceClassificationModel.
+
+        Args:
+            num_classes (int): Number of output classes for classification.
+        """
         super().__init__()
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
@@ -37,8 +38,16 @@ class RiceClassificationModel(nn.Module):
         self.fc1 = nn.Linear(128 * 6 * 6, 256)
         self.fc2 = nn.Linear(256, num_classes)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass."""
+    def forward(self, x: Tensor) -> Tensor:
+        """
+        Defines the forward pass of the model.
+
+        Args:
+            x (Tensor): Input tensor representing a batch of images.
+
+        Returns:
+            Tensor: Output tensor representing the class scores for each image in the batch.
+        """
         x = torch.relu(self.conv1(x))
         x = self.pool(x)
         x = torch.relu(self.conv2(x))
@@ -59,6 +68,6 @@ if __name__ == "__main__":
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
 
     # Test with dummy input
-    dummy_input = torch.randn(1, 1, 50, 50)  # Batch size = 1, Channels = 1, Image size = 50x50
+    dummy_input = torch.randn(1, 3, 50, 50)  # Batch size = 1, Channels = 3, Image size = 50x50
     output = model(dummy_input)
     print(f"Output shape: {output.shape}")
