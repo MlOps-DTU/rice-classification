@@ -1,18 +1,20 @@
-from contextlib import asynccontextmanager
-import torch
-from fastapi import FastAPI, File, UploadFile, BackgroundTasks
-from PIL import Image
-import wandb
-import torchvision.transforms as transforms
-from loguru import logger
-import os
-from rice_classification.model import RiceClassificationModel
-from dotenv import load_dotenv
-from datetime import datetime
-import pytz
-import numpy as np
-from google.cloud import storage
 import json
+import os
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import numpy as np
+import pytz
+import torch
+import torchvision.transforms as transforms
+from dotenv import load_dotenv
+from fastapi import BackgroundTasks, FastAPI, File, UploadFile
+from google.cloud import storage
+from loguru import logger
+from PIL import Image
+
+import wandb
+from rice_classification.model import RiceClassificationModel
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")

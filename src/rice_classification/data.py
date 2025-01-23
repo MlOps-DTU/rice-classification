@@ -1,13 +1,13 @@
 import os
-import torch
-from torchvision import datasets, transforms
-from sklearn.model_selection import train_test_split
-from torch.utils.data import Subset
-import hydra
-from loguru import logger
 import subprocess
 import zipfile
 
+import hydra
+import torch
+from loguru import logger
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Subset
+from torchvision import datasets, transforms
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")

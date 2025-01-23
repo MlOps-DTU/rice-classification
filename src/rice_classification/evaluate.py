@@ -1,9 +1,11 @@
+import os
+
+import hydra
 import torch
+from loguru import logger
+
 from rice_classification.data import get_rice_pictures
 from rice_classification.model import RiceClassificationModel
-import hydra
-from loguru import logger
-import os
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")

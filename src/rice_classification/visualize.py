@@ -1,5 +1,5 @@
-import torch
 import gcsfs
+import torch
 
 # Define the GCS file path
 bucket_path = "gs://emils_mlops_data_bucket/data/processed/train.pt"

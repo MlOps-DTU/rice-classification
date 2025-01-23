@@ -1,7 +1,8 @@
-import pytest
-from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
+
+import pytest
 import torch
+from fastapi.testclient import TestClient
 from rice_classification.api import app
 
 
