@@ -130,9 +130,9 @@ async def lifespan(app: FastAPI):
     #  Get data from the data module
     training_data, _ = get_rice_pictures()
 
-    # Define a subset (e.g., first 100 samples or random samples)
-    subset_size = 500
-    subset_indices = random.sample(range(len(training_data)), subset_size)  # Randomly pick 100 samples
+    # Define a subset (e.g., first 500 samples or random samples)
+    subset_size = 2000
+    subset_indices = random.sample(range(len(training_data)), subset_size) 
     subset_data = Subset(training_data, subset_indices)
 
     # Create a DataLoader for the subset
