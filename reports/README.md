@@ -117,8 +117,8 @@ will check the repositories and the code to verify your answers.
 > **Enter the group number you signed up on <learn.inside.dtu.dk>**
 >
 > Answer:
->
-> Group 27
+
+ Group 27
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -127,8 +127,9 @@ will check the repositories and the code to verify your answers.
 >
 > *s232165, sXXXXXX, sXXXXXX*
 >
-> Answer:
-> s233791, s210169, s232165, s232515, s246714
+Answer:
+
+s233791, s210169, s232165, s232515, s246714
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -142,7 +143,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
-For this project we used the third-party framework torchvision, and specificily the transform sub-library. We used the package functionality of being able to create a transform pipeline to modify images. We used this transform pipeline to easily resize and normalize our pictures in our data pipeline. Our images were originally 250 x 250 pixels, which is quite large given the task is to classify rice images. Hence, to save computation it was beneficial for us to make them smaller (50 x 50 pixels) and normalize all the individual pixel values. This package made it much easier for us to make these steps, as the package both comes with a pipeline setup to set these steps after each other and with build-in functions to do this. Moreover, the transform pipeline acts on the whole data set and there was therefore no need for us to loop over all the individual pictures, that was all handled by the package. 
+For this project we used the third-party framework torchvision, and specificily the transform sub-library. We used the package functionality of being able to create a transform pipeline to modify images. We used this transform pipeline to easily resize and normalize our pictures in our data pipeline. Our images were originally 250 x 250 pixels, which is quite large given the task is to classify rice images. Hence, to save computation it was beneficial for us to make them smaller (50 x 50 pixels) and normalize all the individual pixel values. This package made it much easier for us to make these steps, as the package both comes with a pipeline setup to set these steps after each other and with build-in functions to do this. Moreover, the transform pipeline acts on the whole data set and there was therefore no need for us to loop over all the individual pictures, that was all handled by the package.
 
 ## Coding environment
 
@@ -193,7 +194,9 @@ From the cookiecutter template we have filled out configs folder, the data folde
 >
 > Answer:
 
---- question 6 fill here ---
+We implemented rules for code quality and formatting to ensure consistency. For both linting and formatting, we used Ruff. Ruff helped us detect and fix issues such as unused imports, PEP 8 violations, and unnecessary whitespace. We also used type hints to reduce the risk of type-related bugs. Additionally, we documented our code with clear docstrings in functions and classes to explain their purpose.
+
+These concepts are essential in larger projects because they often require collaboration among multiple team members. Consistent formatting makes the code clearer and easier to read, reducing misunderstandings between contributors. Documentation is important when new members join the team, as it helps them quickly understand the purpose of the code.
 
 ## Version control
 
@@ -274,13 +277,13 @@ From the cookiecutter template we have filled out configs folder, the data folde
 >
 > Answer:
 >
-> We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
->
->**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.
->
-> **The testing workflow** automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.
->
->Together, these workflows provide a robust CI setup that maintains high code quality, ensures efficient development, and supports cross-platform compatibility.
+We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
+
+**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.
+
+**The testing workflow** automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.
+
+Together, these workflows provide a robust CI setup that maintains high code quality, ensures efficient development, and supports cross-platform compatibility.
 
 ## Running code and tracking experiments
 
