@@ -1,0 +1,33 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    '.',
+    '-t',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/project/monitoring:latest',
+    '-f',
+    'dockerfiles/monitoring.dockerfile'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/project/monitoring:latest'
+  ]
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Deploy to Cloud Run'
+  args: [
+    'run',
+    'deploy',
+    'monitoring',
+    '--image',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/project/monitoring:latest',
+    '--region',
+    'europe-west1',
+    '--platform',
+    'managed',
+    '--memory=1024Mi',
+  ]
+options:
+  logging: CLOUD_LOGGING_ONLY
