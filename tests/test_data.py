@@ -1,15 +1,30 @@
 import os
 
+from omegaconf import OmegaConf
 import pytest
 from torch.utils.data import Subset
 
 from rice_classification.data import get_rice_pictures
 
-def test_get_rice_pictures():
+@pytest.fixture
+def mock_cfg():
+    cfg = OmegaConf.create({
+        "parameters": {
+            "height": 50,
+            "width": 50,
+            "test_size": 0.2,
+            "raw_dir": "data/raw_unzipped",
+            "zip_file_path": "data/raw/Arborio.zip",
+            "processed_dir": "data/processed"
+        }
+    })
+    return cfg
+
+def test_get_rice_pictures(mock_cfg):
     """
     Test the `get_rice_pictures` function for loading preprocessed datasets.
     """
-    loaded_train, loaded_test = get_rice_pictures()
+    loaded_train, loaded_test = get_rice_pictures(mock_cfg)
 
     assert isinstance(loaded_train, Subset), "Loaded train dataset is not a Subset."
     assert isinstance(loaded_test, Subset), "Loaded test dataset is not a Subset."
