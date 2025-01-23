@@ -117,8 +117,8 @@ will check the repositories and the code to verify your answers.
 > **Enter the group number you signed up on <learn.inside.dtu.dk>**
 >
 > Answer:
->
-> Group 27
+
+ Group 27
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -127,8 +127,9 @@ will check the repositories and the code to verify your answers.
 >
 > *s232165, sXXXXXX, sXXXXXX*
 >
-> Answer:
-> s233791, s210169, s232165, s232515, s246714
+Answer:
+
+s233791, s210169, s232165, s232515, s246714
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -196,7 +197,9 @@ From the cookiecutter template we have filled out configs folder, the data folde
 > Answer:
 We used `ruff` for linting and `ruff` for formatting our code. We also used `mypy` for typing and used key words such as `Parameters`, `Args` and `Return` when writting dogstring documentation for our functions. Overall, in the project we strived to document all our functions in the src folder both with dogstrings and a suitable amount of comments. We added two styling rules in `ruff`, one to manage the order of the imports and the other to ensure that no line extends a 120 characters.
 
+
 These concepts are important in larger projects, so make sure that the code is easy to understand for other programmers. In large projects many people work on projects, and by following the same formatting standard the code becomes easier to read for people who knows this style standard. Furthermore, by using typing it is easier to follow the code, and documentation again serve as a tool to make it easier to understand what the code does. All these steps, serve to make code more understandable and easy to work on if it is the first time you see it.
+
 
 ## Version control
 
@@ -277,13 +280,13 @@ These concepts are important in larger projects, so make sure that the code is e
 >
 > Answer:
 >
-> We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
->
->**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.
->
-> **The testing workflow** automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.
->
->Together, these workflows provide a robust CI setup that maintains high code quality, ensures efficient development, and supports cross-platform compatibility.
+We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
+
+**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.
+
+**The testing workflow** automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.
+
+Together, these workflows provide a robust CI setup that maintains high code quality, ensures efficient development, and supports cross-platform compatibility.
 
 ## Running code and tracking experiments
 
