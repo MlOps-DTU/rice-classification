@@ -2,7 +2,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import pytest
-from rice_classification.model import RiceClassificationModel
+from src.rice_classification.model import RiceClassificationModel
 
 
 def test_model_construction():
@@ -66,27 +66,30 @@ if __name__ == "__main__":
 """
 COVERAGE REPORT
 
->> coverage run -m pytest test_model.py
-======================================================= test session starts ========================================================
+>> coverage run -m pytest tests/test_model.py
+C:/Users/USUARIO/AppData/Local/Programs/Python/Python312/Lib/site-packages/pytest_asyncio/plugin.py:207: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))   
+============================ test session starts =============================
 platform win32 -- Python 3.12.0, pytest-8.3.4, pluggy-1.5.0
-rootdir: C:/Users/USUARIO/Documents/DTU/MLOps2/rice-classification
+rootdir: C:/Users/USUARIO/Documents/DTU/MLOps5/rice-classification
 configfile: pyproject.toml
-plugins: anyio-4.8.0, hydra-core-1.3.2
-collected 2 items
+plugins: anyio-4.3.0, hydra-core-1.3.2, asyncio-0.25.2
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None
+collected 2 items                                                             
 
-test_model.py ..                                                                                                              [100%]
+tests/test_model.py ..                                                  [100%]
 
-======================================================== 2 passed in 4.66s =========================================================
+============================= 2 passed in 6.99s ============================== 
 
 
 >> coverage report
-Name                                                                                            Stmts   Miss  Cover
--------------------------------------------------------------------------------------------------------------------
-C:/Users/USUARIO/Documents/DTU/MLOps2/rice-classification/src/rice_classification/__init__.py       0      0   100%
-C:/Users/USUARIO/Documents/DTU/MLOps2/rice-classification/src/rice_classification/model.py         32      7    78%
-__init__.py                                                                                         4      0   100%
-test_model.py                                                                                      36      1    97%
--------------------------------------------------------------------------------------------------------------------
-TOTAL                                                                                              72      8    89%
+Name                                  Stmts   Miss  Cover
+---------------------------------------------------------
+src/rice_classification/__init__.py       0      0   100%
+src/rice_classification/model.py         32      7    78%
+---------------------------------------------------------
+TOTAL                                    32      7    78%                                                                                      72      8    89%
 
 """
