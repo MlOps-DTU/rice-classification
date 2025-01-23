@@ -1,19 +1,21 @@
-from evidently.metric_preset import TargetDriftPreset, DataDriftPreset, DataQualityPreset
-from evidently.report import Report
-import pandas as pd
-from fastapi.responses import HTMLResponse
-import anyio
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from loguru import logger
-from rice_classification.data import get_rice_pictures
-from dotenv import load_dotenv
-import numpy as np
-from google.cloud import storage
 import json
-from torch.utils.data import DataLoader, Subset
-import torch
 import random
+from contextlib import asynccontextmanager
+
+import anyio
+import numpy as np
+import pandas as pd
+import torch
+from dotenv import load_dotenv
+from evidently.metric_preset import DataDriftPreset, DataQualityPreset, TargetDriftPreset
+from evidently.report import Report
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from google.cloud import storage
+from loguru import logger
+from torch.utils.data import DataLoader, Subset
+
+from rice_classification.data import get_rice_pictures
 
 # Add a logger to the script that logs messages to a file
 logger.add("my_log.log", level="DEBUG", rotation="100 MB")
