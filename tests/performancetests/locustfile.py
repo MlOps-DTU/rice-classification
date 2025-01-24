@@ -1,13 +1,14 @@
 import os
 import time
-from locust import HttpUser, task, between
-from locust.contrib.fasthttp import FastHttpUser
-from locust import events
 from io import BytesIO
+
+from locust import HttpUser, between, events, task
+from locust.contrib.fasthttp import FastHttpUser
 from PIL import Image
 
+
 class RiceClassificationUser(FastHttpUser):
-    wait_time = between(1, 2) 
+    wait_time = between(1, 2)
 
     @task
     def upload_image(self):
@@ -20,12 +21,10 @@ class RiceClassificationUser(FastHttpUser):
             files={"data": ("sample_image.jpg", BytesIO(file_data), "image/jpg")},
             catch_response=True,
         ) as response:
-
             if response.status_code == 200:
                 print(f"Prediction successful: {response.json()}")
             else:
                 response.failure(f"Prediction failed with status code {response.status_code}")
-
 
 
 """

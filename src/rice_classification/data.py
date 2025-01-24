@@ -134,6 +134,7 @@ def run_gbucket() -> None:
 
     print("All files downloaded successfully.")
 
+
 def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str = "data/raw_unzipped") -> None:
     """
     Unzips a specified zip file to a given directory.
