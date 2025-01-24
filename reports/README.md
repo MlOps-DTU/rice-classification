@@ -582,7 +582,7 @@ Since we are working with image data, we evaluated metrics such as average brigh
 >
 > Answer:
 
-You can see the project arcitecture in **[this figure](figures/project_architecture.png).** We have used several of the tools presetned in the course.
+You can see the project arcitecture in ![architecture](figures/project_architecture.png) We have used several of the tools presetned in the course.
 
 First, we created a GitHub repository for our project and a Google Cloud bucket for storing the data. We used dvc push to upload the data after running data.py to process the data. Since generating the data for training the model is not a step that needs to be executed multiple times initially, we did not include continuous integration for now. However, if the data changes, `data.py` should automatically recreate the processed data.
 
