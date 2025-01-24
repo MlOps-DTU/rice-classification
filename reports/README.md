@@ -536,7 +536,7 @@ We managed to train our model in the cloud using Vertex AI. We did this by creat
 >
 > Answer:
 
---- question 27 fill here ---
+During our project we only ran stuff in the cloud through the account of s233791. He as given a free app trial of 7,500Dkk credits and the trail also gave some free tier benefits for compute. Hence, overall we ended spending a total of 27Dkk in credits, with discounts on Cloud Run. Costing the most was cloud storage where we spend 15.39Dkk and the second most expensive item was Compute Engine costing 10.97. Vertex AI only cost 0.26Dkk and the Artifact Registry cost 0.57Dkk. In the begining working in the cloud was quite frustrating, because we had to figure out authentication to different services, but once we had control of that it was a really nice experience being able to create and run everything remotely. The best part was not having to train models locally.
 
 ### Question 28
 
