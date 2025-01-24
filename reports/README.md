@@ -612,4 +612,13 @@ Additionally, running GitHub Actions for testing required considerable attention
 >
 > Answer:
 
---- question 31 fill here ---
+s246714 - Created the original repo and was tasked with setting up a continous workflow that triggers when data changes.
+
+s232165 - Did the training and evaluation of our model, as well as continous integration for the tests, pre-commit hooks and linting steps.
+
+s232515 - Was in charge of developing the tests and load-testing and together with s232165 made them run on github too. Also did the model part.
+
+s233791 - Was in charge of cookiecutter, working with hydra and configuration, did the data part in parternership, ran the cloud stuff for all our applications, created the weights and biases acoount and setup in train. Did the DVC data versioning and docker files.
+
+s210169 - Did the data.py in partnership, did some of the docker files, in charge of developing the api and the monitoring api as well as making it run on the cloud. 
+
