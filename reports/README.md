@@ -218,7 +218,7 @@ These concepts are important in larger projects, so make sure that the code is e
 > Answer:
 
 Within test_api, we have implemented test_root (to test the connection with the api), test_predict_no_file (for the connections without any file, error 422) and test_predict_endpoint (to test a sucessful connection, code 200).
-The test_data file has the test test_get_rice_pictures, which asserts if the train and test are loaded correctly, and if the type and the length are also correct. 
+The test_data file has the test test_get_rice_pictures, which asserts if the train and test are loaded correctly, and if the type and the length are also correct.
 Within the test_model file we have implemented test_model_construction (asserts that the layers of the model and the number of parameters are correct) and test_model_training (which checks if the loss function returns valid loss, the params.grad are valid …)
 
 
@@ -235,8 +235,8 @@ Within the test_model file we have implemented test_model_construction (asserts 
 >
 > Answer:
 
-We have implemented a coverage report in both test_data and test_model files. In the test_data, we can see a coverage percetage of 28%. This low percetage means that only a small portion of the code has been executed during testing. On the other hand, the coverage report of test_model file has a coverage percentage of 78%. As we can see, most of the code has been executed. 
-Since the coverage percentage only indicates the percentage of code that has been run, that does not indicates that the code is error free. A file could have 100% code coverage and still have some errors. 
+We have implemented a coverage report in both test_data and test_model files. In the test_data, we can see a coverage percetage of 28%. This low percetage means that only a small portion of the code has been executed during testing. On the other hand, the coverage report of test_model file has a coverage percentage of 78%. As we can see, most of the code has been executed.
+Since the coverage percentage only indicates the percentage of code that has been run, that does not indicates that the code is error free. A file could have 100% code coverage and still have some errors.
 
 
 ### Question 9
@@ -308,7 +308,7 @@ Together, these workflows provide a robust CI setup that maintains high code qua
 >
 > Answer:
 
-In our project we configured experiments through the use of the `Hydra` library and config files that contains variables such as the learning rate, batch size and the optimizer configurations for training our model. In our project we made config files for both the data.py file, the train.py file and the evaluate.py file. In each of these files the main function takes an argument that we called `config_name` that holds a path to the config file with the experiment details. To run an experiment, simply adjust the path to the associated config file. 
+In our project we configured experiments through the use of the `Hydra` library and config files that contains variables such as the learning rate, batch size and the optimizer configurations for training our model. In our project we made config files for both the data.py file, the train.py file and the evaluate.py file. In each of these files the main function takes an argument that we called `config_name` that holds a path to the config file with the experiment details. To run an experiment, simply adjust the path to the associated config file.
 
 ### Question 13
 
@@ -347,11 +347,11 @@ As seen in the second image below we also tracked the training accuracy and how 
 
 ![Training Accuracy](figures/trainaccuracy.png)
 
-Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. We store parameters such as the batch size, number of epochs and the learning rate. Morover, we track the performance metrics: accuracy, f1-scores, precision and recall. In that way we are able to track what parameters were used to train each model and the resulting performance. Moreover, each model is also saved so it is possible to download it from Weights and Biases as is done in our evaluation file. 
+Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. We store parameters such as the batch size, number of epochs and the learning rate. Morover, we track the performance metrics: accuracy, f1-scores, precision and recall. In that way we are able to track what parameters were used to train each model and the resulting performance. Moreover, each model is also saved so it is possible to download it from Weights and Biases as is done in our evaluation file.
 
 ![Model Info](figures/modelinfo.png)
 
-In this project we were more intrested in learning about the operations part, and not so focused on achieving the best model performance. Therefore, we did not spend the time on doing a parameter sweep to achieve the best model performance, but doing this is also supported through Weights and Biases. 
+In this project we were more intrested in learning about the operations part, and not so focused on achieving the best model performance. Therefore, we did not spend the time on doing a parameter sweep to achieve the best model performance, but doing this is also supported through Weights and Biases.
 
 ### Question 15
 
@@ -381,7 +381,7 @@ For our project we developed several docker images, one for training, one for ou
 >
 > Answer:
 
-The debugging methos used in this project was dependent on each different group member. For some issues simple print statements were used, while for more complex issues we resorted to using the build-in python debugger and the build-in debugger in Visual Studio Code. In that way we were able to insert stops and track variables as we moved through the code. In this project we did not use profilling. Not because we think it is perfect, but because we focused on other elements of the course curriculum. If we had more time, it would be a good idea to do profiling to identify areas of the code that could be improved to improve run time.  
+The debugging methos used in this project was dependent on each different group member. For some issues simple print statements were used, while for more complex issues we resorted to using the build-in python debugger and the build-in debugger in Visual Studio Code. In that way we were able to insert stops and track variables as we moved through the code. In this project we did not use profilling. Not because we think it is perfect, but because we focused on other elements of the course curriculum. If we had more time, it would be a good idea to do profiling to identify areas of the code that could be improved to improve run time.
 
 ## Working in the cloud
 
@@ -433,7 +433,7 @@ The bucket that we used for this project can be seen below. We stored our data a
 >
 > Answer:
 
-Here is an image where we see the docker images of our api, our monitoring api and our train images. 
+Here is an image where we see the docker images of our api, our monitoring api and our train images.
 ![Artifact Registry Group 27](figures/group_27_registry.png)
 
 ### Question 21
@@ -459,7 +459,7 @@ Here we see our build history. The two latest greeen builds are the API and the 
 >
 > Answer:
 
-We managed to train our model in the cloud using Vertex AI. We did this by creating `vertex_ai_train.yaml` file that we then submitted to gcloud through `gcloud builds submit`. In this file we also injected our Weights and Biases API Key through the secrets manager in gcloud. We did this as to keep the API key hidden from the other public files, but accessible to the code when run in the cloud. When creating the custom Vertex AI job we specified the machine type in the file config.yaml. We used Vertex AI because this service automatically creates the CM for us, launch the training procedure and close the VM again afterwards. 
+We managed to train our model in the cloud using Vertex AI. We did this by creating `vertex_ai_train.yaml` file that we then submitted to gcloud through `gcloud builds submit`. In this file we also injected our Weights and Biases API Key through the secrets manager in gcloud. We did this as to keep the API key hidden from the other public files, but accessible to the code when run in the cloud. When creating the custom Vertex AI job we specified the machine type in the file config.yaml. We used Vertex AI because this service automatically creates the CM for us, launch the training procedure and close the VM again afterwards.
 
 ## Deployment
 

@@ -54,11 +54,11 @@ rootdir: C:/Users/USUARIO/Documents/DTU/MLOps7/rice-classification
 configfile: pyproject.toml
 plugins: anyio-4.3.0, hydra-core-1.3.2, asyncio-0.25.2
 asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None
-collected 1 item                                                          
+collected 1 item
 
 tests/test_data.py .                                                [100%]
 
-============================ warnings summary ============================ 
+============================ warnings summary ============================
 ../../../../AppData/Roaming/Python/Python312/site-packages/dateutil/tz/tz.py:37
   C:/Users/USUARIO/AppData/Roaming/Python/Python312/site-packages/dateutil/tz/tz.py:37: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
     EPOCH = datetime.datetime.utcfromtimestamp(0)
@@ -67,10 +67,10 @@ tests/test_data.py .                                                [100%]
   <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.MessageMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
 
 <frozen importlib._bootstrap>:488
-  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14. 
+  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
 
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html    
-===================== 1 passed, 3 warnings in 13.78s ===================== 
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================== 1 passed, 3 warnings in 13.78s =====================
 
 
 >> coverage report
