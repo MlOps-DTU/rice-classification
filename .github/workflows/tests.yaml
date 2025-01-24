@@ -33,13 +33,6 @@ jobs:
       env:
         GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-
-    - name: Download additional data (if needed)
-      run: |
-        gsutil cp -r gs://emils_mlops_data_bucket/data .
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
