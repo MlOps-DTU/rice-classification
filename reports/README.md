@@ -407,7 +407,8 @@ In this project we made use of Cloud Run, Cloud Build, Vertex AI, Cloud Storage 
 > *using a custom container: ...*
 >
 > Answer:
-In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: [Monitoring .yaml file](https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml).
+In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: [Monitoring .yaml file](https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml). When we trained our model we created a custom job uisng a n1-highmem-2
+machine with 1 worker.
 
 ### Question 19
 
@@ -416,7 +417,7 @@ In this project we did not use the compute engine directly and did not explicitl
 >
 > Answer:
 
-The bucket that we used for this project can be seen below. We stored our data as a zip file due to performance issues with DVC when handling a large amount of files. The zip file contains folders with each image class, that each contain individual images.
+The bucket that we used for this project can be seen below. We stored our data as a zip file due to performance issues with DVC when handling a large amount of files. The zip file contains folders with each image class, that each contain individual images. We also stored the processed training and test data set so that we did not have to process them every time as well as a data frame of image characteristics of the training set for the data drifting monitoring.
 ![Data Bucket Group 27](figures/group_27_bucket.png)
 
 
@@ -427,7 +428,8 @@ The bucket that we used for this project can be seen below. We stored our data a
 >
 > Answer:
 
---- question 20 fill here ---
+Here is an image where we see the docker images of our api, our monitoring api and our train images. 
+![Artifact Registry Group 27](figures/group_27_registry.png)
 
 ### Question 21
 
@@ -436,7 +438,8 @@ The bucket that we used for this project can be seen below. We stored our data a
 >
 > Answer:
 
---- question 21 fill here ---
+Here we see our build history. The two latest greeen builds are the API and the monitoring API respectively:
+![Build History](figures/group_27_build_hist.png)
 
 ### Question 22
 
@@ -451,7 +454,7 @@ The bucket that we used for this project can be seen below. We stored our data a
 >
 > Answer:
 
---- question 22 fill here ---
+We managed to train our model in the cloud using Vertex AI. We did this by creating `vertex_ai_train.yaml` file that we then submitted to gcloud through `gcloud builds submit`. In this file we also injected our Weights and Biases API Key through the secrets manager in gcloud. We did this as to keep the API key hidden from the other public files, but accessible to the code when run in the cloud. When creating the custom Vertex AI job we specified the machine type in the file config.yaml. We used Vertex AI because this service automatically creates the CM for us, launch the training procedure and close the VM again afterwards. 
 
 ## Deployment
 
