@@ -507,7 +507,7 @@ Yes, we deployed our API in the cloud on Cloud Run. We did so by creating a `clo
 >
 > Answer:
 
-Yes, we performed both. For unit_testing on the api, we used pytest and more information can be found on question 7. Additionally, we have performed the load testing of our API. It can be found in tests/performancetests/locustfile.py. We created a function called predict to simulate a prediction of a sample_image, and then a function root for the connection to the api. The results shows that, since all the percetiles are the same 4100,   the response time for every request were very similar and took 4.1 seconds per request, and that 43 request were made in total and of all them had similar response times. For real-time image prediction, this response time of 4.1 seconds is very slow, and could indicate optimization issues. 
+Yes, we performed both. For unit_testing on the api, we used pytest and more information can be found on question 7. Additionally, we have performed the load testing of our API. It can be found in tests/performancetests/locustfile.py. We created a function called predict to simulate a prediction of a sample_image, and then a function root for the connection to the api. The results shows that, since all the percetiles are the same 4100,   the response time for every request were very similar and took 4.1 seconds per request, and that 43 request were made in total and of all them had similar response times. For real-time image prediction, this response time of 4.1 seconds is very slow, and could indicate optimization issues.
 
 
 ### Question 26
@@ -521,7 +521,7 @@ Yes, we performed both. For unit_testing on the api, we used pytest and more inf
 > *We did not manage to implement monitoring. We would like to have monitoring implemented such that over time we could*
 > *measure ... and ... that would inform us about this ... behaviour of our application.*
 >
-> Answer: 
+> Answer:
 
 We did not monitor by attaching metrics to the application. However, since our application is set up in Google Cloud, we can evaluate the development of various metrics and set up alerts directly on the APIs. This enables us to better monitor system performance and avoid issues like excessive daily requests, which can lead to unexpected costs. Since we store results in a cloud bucket, setting up alerts for capacity issues could be beneficial. For instance, these alerts can trigger automated clean-up processes for old data, ensuring we manage storage efficiently and avoid potential overflows.
 
@@ -579,9 +579,9 @@ Since we are working with image data, we evaluated metrics such as average brigh
 > *The starting point of the diagram is our local setup, where we integrated ... and ... and ... into our code.*
 > *Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...*
 >
-> Answer: 
+> Answer:
 
-You can see the project arcitecture in **[this figure](figures/project_architecture.png).** We have used several of the tools presetned in the course. 
+You can see the project arcitecture in **[this figure](figures/project_architecture.png).** We have used several of the tools presetned in the course.
 
 First, we created a GitHub repository for our project and a Google Cloud bucket for storing the data. We used dvc push to upload the data after running data.py to process the data. Since generating the data for training the model is not a step that needs to be executed multiple times initially, we did not include continuous integration for now. However, if the data changes, `data.py` should automatically recreate the processed data.
 
@@ -635,5 +635,4 @@ s232515 - Was in charge of developing the tests and load-testing and together wi
 
 s233791 - Was in charge of cookiecutter, working with hydra and configuration, did the data part in parternership, ran the cloud stuff for all our applications, created the weights and biases acoount and setup in train. Did the DVC data versioning and docker files.
 
-s210169 - Did the data.py in partnership, did some of the docker and .yaml files, in charge of developing the api and the monitoring api as well as making it run on the cloud. 
-
+s210169 - Did the data.py in partnership, did some of the docker and .yaml files, in charge of developing the api and the monitoring api as well as making it run on the cloud.

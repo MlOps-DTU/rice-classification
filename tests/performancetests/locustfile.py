@@ -1,6 +1,8 @@
-from locust import HttpUser, task, between
-import random
 import os
+import random
+
+from locust import HttpUser, between, task
+
 
 class RiceClassificationUser(HttpUser):
     wait_time = between(1, 3)  # Random wait time between requests
@@ -8,15 +10,15 @@ class RiceClassificationUser(HttpUser):
     @task
     def predict(self):
         test_image_path = "tests/sample_image.jpg"
-        
+
         if not os.path.exists(test_image_path):
             print(f"Error: Test image file '{test_image_path}' does not exist.")
             return
-        
+
         with open(test_image_path, "rb") as img:
             files = {"data": img}
             self.client.post("/predict/", files=files)
-    
+
     @task(2)
     def root(self):
         self.client.get("/")
