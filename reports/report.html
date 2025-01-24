@@ -207,9 +207,9 @@ Since the coverage percentage only indicates the percentage of code that has bee
 <p>Example:
 <em>We did make use of DVC in the following way: ... . In the end it helped us in ... for controlling ... part of our</em>
 <em>pipeline</em></p>
-<p>Answer:
-In this project we did make use of DVC for managing our data version. In this was we are able to track what version of the data we are working with and more importantly revert to a previous of the data to recreate our experiments if for example unexpteced behavior of a model is seen after training on a new data set. Using DVC also makes it easy for a new team member to access the data, that can be pulled through the simple command <code>dvc pull</code>. However, in our code we ended up not pulling the data through DVC, but pulled the data directly from our associated google cloud bucket. In this project we only worked with the data set we started with, but DVC makes it easy to add additional data, while ensuring data version control.</p>
+<p>Answer:</p>
 </blockquote>
+<p>In this project we did make use of DVC for managing our data version. In this was we are able to track what version of the data we are working with and more importantly revert to a previous of the data to recreate our experiments if for example unexpteced behavior of a model is seen after training on a new data set. Using DVC also makes it easy for a new team member to access the data, that can be pulled through the simple command <code>dvc pull</code>. However, in our code we ended up not pulling the data through DVC, but pulled the data directly from our associated google cloud bucket. In this project we only worked with the data set we started with, but DVC makes it easy to add additional data, while ensuring data version control.</p>
 <h3>Question 11</h3>
 <blockquote>
 <p><strong>Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,</strong>

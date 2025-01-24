@@ -413,7 +413,7 @@ In this project we did make use of DVC for managing our data version. In this wa
 > *using a custom container: ...*
 >
 > Answer:
->In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: [Monitoring .yaml file](https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml). 
+>In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: [Monitoring .yaml file](https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml).
 
 >When we trained our model we created a custom job uisng a n1-highmem-2
 machine with 1 worker.
