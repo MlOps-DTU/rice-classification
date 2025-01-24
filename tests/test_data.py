@@ -6,6 +6,9 @@ from torch.utils.data import Subset
 
 from src.rice_classification.data import get_rice_pictures
 
+# Skip all tests in this module if the data folder is missing
+pytestmark = pytest.mark.skipif(not os.path.exists("data/raw_unzipped"), reason="Data folder is missing")
+
 
 @pytest.fixture
 def mock_cfg():
