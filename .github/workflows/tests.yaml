@@ -33,25 +33,23 @@ jobs:
     # Authenticate with Google Cloud
     - name: Authenticate to Google Cloud
       id: auth
-      uses: google-github-actions/auth@v2
+      uses: "google-github-actions/auth@v2"
       with:
-        credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+        credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
-    # Verify that DVC can connect to the remote
     - name: Verify DVC remote
       run: |
         dvc remote list
         dvc status
       env:
-        GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        GDRIVE_CREDENTIALS_DATA: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
-    # Pull data using DVC
     - name: Get data with DVC
       run: |
         dvc pull
-        ls -R data  # Verify the data directory contents
+        ls -R data
       env:
-        GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        GDRIVE_CREDENTIALS_DATA: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
     - name: Install dependencies
       run: |
