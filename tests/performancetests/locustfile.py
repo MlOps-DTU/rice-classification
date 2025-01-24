@@ -1,49 +1,39 @@
+from locust import HttpUser, task, between
+import random
 import os
-import time
-from io import BytesIO
 
-from locust import HttpUser, between, events, task
-from locust.contrib.fasthttp import FastHttpUser
-from PIL import Image
-
-
-class RiceClassificationUser(FastHttpUser):
-    wait_time = between(1, 2)
+class RiceClassificationUser(HttpUser):
+    wait_time = between(1, 3)  # Random wait time between requests
 
     @task
-    def upload_image(self):
-        image_path = "tests/sample_image.jpg"
-        with open(image_path, "rb") as f:
-            file_data = f.read()
-
-        with self.client.post(
-            "/predict/",
-            files={"data": ("sample_image.jpg", BytesIO(file_data), "image/jpg")},
-            catch_response=True,
-        ) as response:
-            if response.status_code == 200:
-                print(f"Prediction successful: {response.json()}")
-            else:
-                response.failure(f"Prediction failed with status code {response.status_code}")
+    def predict(self):
+        test_image_path = "tests/sample_image.jpg"
+        
+        if not os.path.exists(test_image_path):
+            print(f"Error: Test image file '{test_image_path}' does not exist.")
+            return
+        
+        with open(test_image_path, "rb") as img:
+            files = {"data": img}
+            self.client.post("/predict/", files=files)
+    
+    @task(2)
+    def root(self):
+        self.client.get("/")
 
 
 """
 Locust report
 
 >> locust -f tests/performancetests/locustfile.py --headless --users 10 --spawn-rate 1 --run-time 30s --host http://localhost:8089
-[2025-01-24 12:06:15,830] DESKTOP-UHS6K67/INFO/locust.main: Starting Locust 2.32.6
-[2025-01-24 12:06:15,832] DESKTOP-UHS6K67/INFO/locust.main: Run time limit set to 30 seconds
+[2025-01-24 12:27:16,805] DESKTOP-UHS6K67/INFO/locust.main: Starting Locust 2.32.6
+[2025-01-24 12:27:16,807] DESKTOP-UHS6K67/INFO/locust.main: Run time limit set to 30 seconds
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
          Aggregated       0     0(0.00%) |      0       0       0      0 |    0.00        0.00
 
-[2025-01-24 12:06:15,832] DESKTOP-UHS6K67/INFO/locust.runners: Ramping to 10 users at a rate of 1.00 per second
-Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
---------||-------|-------------|-------|-------|-------|-------|--------|-----------
---------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated       0     0(0.00%) |      0       0       0      0 |    0.00        0.00
-
+[2025-01-24 12:27:16,810] DESKTOP-UHS6K67/INFO/locust.runners: Ramping to 10 users at a rate of 1.00 per second
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
@@ -51,91 +41,117 @@ Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  fa
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/       2   2(100.00%) |   4061    4051    4071   4071 |    0.00        0.00
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated       2   2(100.00%) |   4061    4051    4071   4071 |    0.00        0.00
+         Aggregated       0     0(0.00%) |      0       0       0      0 |    0.00        0.00
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/       4   4(100.00%) |   4053    4042    4071   4042 |    0.20        0.20
+POST     /predict/       2   2(100.00%) |   4075    4056    4094   4094 |    0.00        0.00
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated       4   4(100.00%) |   4053    4042    4071   4042 |    0.20        0.20
-
-[2025-01-24 12:06:24,880] DESKTOP-UHS6K67/INFO/locust.runners: All users spawned: {"RiceClassificationUser": 10} (10 total users)
-Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
---------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/       7   7(100.00%) |   4048    4034    4071   4034 |    0.50        0.50
---------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated       7   7(100.00%) |   4048    4034    4071   4034 |    0.50        0.50
+         Aggregated       2   2(100.00%) |   4075    4056    4094   4094 |    0.00        0.00
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      11  11(100.00%) |   4050    4034    4071   4071 |    0.60        0.60
+GET      /          2   2(100.00%) |   4093    4081    4104   4100 |    0.00        0.00
+POST     /predict/       2   2(100.00%) |   4075    4056    4094   4094 |    0.20        0.20
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      11  11(100.00%) |   4050    4034    4071   4071 |    0.60        0.60
+         Aggregated       4   4(100.00%) |   4084    4056    4104   4100 |    0.20        0.20
+
+[2025-01-24 12:27:25,879] DESKTOP-UHS6K67/INFO/locust.runners: All users spawned: {"RiceClassificationUser": 10} (10 total users)
+Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------||-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /          3   3(100.00%) |   4085    4069    4104   4100 |    0.14        0.14
+POST     /predict/       3   3(100.00%) |   4076    4056    4094   4094 |    0.29        0.29
+--------||-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated       6   6(100.00%) |   4081    4056    4104   4100 |    0.43        0.43
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      15  15(100.00%) |   4056    4034    4091   4091 |    1.00        1.00
+GET      /          5   5(100.00%) |   4079    4059    4104   4100 |    0.30        0.30
+POST     /predict/       5   5(100.00%) |   4070    4056    4094   4094 |    0.30        0.30
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      15  15(100.00%) |   4056    4034    4091   4091 |    1.00        1.00
+         Aggregated      10  10(100.00%) |   4074    4056    4104   4100 |    0.60        0.60
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      18  18(100.00%) |   4059    4034    4091   4091 |    1.40        1.40
+GET      /          8   8(100.00%) |   4074    4056    4104   4100 |    0.30        0.30
+POST     /predict/       6   6(100.00%) |   4070    4056    4094   4094 |    0.40        0.40
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      18  18(100.00%) |   4059    4034    4091   4091 |    1.40        1.40
+         Aggregated      14  14(100.00%) |   4072    4056    4104   4100 |    0.70        0.70
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      23  23(100.00%) |   4060    4031    4091   4091 |    1.40        1.40
+GET      /          9   9(100.00%) |   4073    4056    4104   4100 |    0.80        0.80
+POST     /predict/       8   8(100.00%) |   4070    4056    4094   4094 |    0.60        0.60
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      23  23(100.00%) |   4060    4031    4091   4091 |    1.40        1.40
+         Aggregated      17  17(100.00%) |   4072    4056    4104   4100 |    1.40        1.40
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      25  25(100.00%) |   4058    4031    4091   4091 |    1.60        1.60
+GET      /         11  11(100.00%) |   4073    4056    4104   4100 |    0.80        0.80
+POST     /predict/       9   9(100.00%) |   4071    4056    4094   4094 |    0.50        0.50
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      25  25(100.00%) |   4058    4031    4091   4091 |    1.60        1.60
+         Aggregated      20  20(100.00%) |   4073    4056    4104   4100 |    1.30        1.30
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      29  29(100.00%) |   4058    4031    4091   4091 |    1.80        1.80
+GET      /         14  14(100.00%) |   4072    4056    4104   4100 |    0.70        0.70
+POST     /predict/      10  10(100.00%) |   4071    4056    4094   4094 |    0.60        0.60
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      29  29(100.00%) |   4058    4031    4091   4091 |    1.80        1.80
+         Aggregated      24  24(100.00%) |   4072    4056    4104   4100 |    1.30        1.30
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      33  33(100.00%) |   4058    4031    4091   4091 |    1.80        1.80
+GET      /         17  17(100.00%) |   4071    4049    4104   4100 |    1.10        1.10
+POST     /predict/      10  10(100.00%) |   4071    4056    4094   4094 |    0.60        0.60
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      33  33(100.00%) |   4058    4031    4091   4091 |    1.80        1.80
+         Aggregated      27  27(100.00%) |   4071    4049    4104   4100 |    1.70        1.70
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      37  37(100.00%) |   4059    4031    4091   4091 |    1.80        1.80
+GET      /         17  17(100.00%) |   4071    4049    4104   4100 |    1.00        1.00
+POST     /predict/      13  13(100.00%) |   4070    4056    4094   4094 |    0.50        0.50
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      37  37(100.00%) |   4059    4031    4091   4091 |    1.80        1.80
+         Aggregated      30  30(100.00%) |   4071    4049    4104   4100 |    1.50        1.50
 
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      40  40(100.00%) |   4058    4031    4091   4091 |    1.90        1.90
+GET      /         17  17(100.00%) |   4071    4049    4104   4100 |    0.90        0.90
+POST     /predict/      17  17(100.00%) |   4069    4053    4094   4094 |    0.50        0.50
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      40  40(100.00%) |   4058    4031    4091   4091 |    1.90        1.90
+         Aggregated      34  34(100.00%) |   4070    4049    4104   4100 |    1.40        1.40
 
-[2025-01-24 12:06:45,305] DESKTOP-UHS6K67/INFO/locust.main: --run-time limit reached, shutting down
-[2025-01-24 12:06:45,491] DESKTOP-UHS6K67/INFO/locust.main: Shutting down (exit code 1)
 Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-POST     /predict/      43  43(100.00%) |   4056    4024    4091   4091 |    1.48        1.48
+GET      /         21  21(100.00%) |   4069    4043    4104   4100 |    0.90        0.90
+POST     /predict/      17  17(100.00%) |   4069    4053    4094   4094 |    0.90        0.90
 --------||-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated      43  43(100.00%) |   4056    4024    4091   4091 |    1.48        1.48
+         Aggregated      38  38(100.00%) |   4069    4043    4104   4100 |    1.80        1.80
+
+[2025-01-24 12:27:46,144] DESKTOP-UHS6K67/INFO/locust.main: --run-time limit reached, shutting down
+[2025-01-24 12:27:46,397] DESKTOP-UHS6K67/INFO/locust.main: Shutting down (exit code 1)
+Type     Name  # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------||-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /         22  22(100.00%) |   4068    4043    4104   4100 |    0.76        0.76
+POST     /predict/      17  17(100.00%) |   4069    4053    4094   4094 |    0.59        0.59
+--------||-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated      39  39(100.00%) |   4068    4043    4104   4100 |    1.35        1.35
 
 Response time percentiles (approximated)
 Type     Name      50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
 --------||--------|------|------|------|------|------|------|------|------|------|------|------
-POST     /predict/     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     43
+GET      /     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     22
+POST     /predict/     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     17
 --------||--------|------|------|------|------|------|------|------|------|------|------|------
-         Aggregated     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     43
+         Aggregated     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     39
+
+Error report
+# occurrences      Error                                                 
+
+------------------|-------------------------------------------------------------
+17                 POST /predict/: ConnectionRefusedError(10061, '[WinError 10061] No connection could be made because the target machine actively refused it.')
+22                 GET /: ConnectionRefusedError(10061, '[WinError 10061] No connection could be made because the target machine actively refused it.')
+------------------|-------------------------------------------------------------
 
 
 
