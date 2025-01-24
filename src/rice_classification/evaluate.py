@@ -46,7 +46,9 @@ def main(cfg) -> None:
 
     # Load the test set
     _, test_set = get_rice_pictures()
-    test_dataloader: torch.utils.data.DataLoader = torch.utils.data.DataLoader(test_set, batch_size=cfg.parameters.batch_size)
+    test_dataloader: torch.utils.data.DataLoader = torch.utils.data.DataLoader(
+        test_set, batch_size=cfg.parameters.batch_size
+    )
 
     # Set the model to evaluation mode
     model.eval()

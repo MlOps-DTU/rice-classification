@@ -19,9 +19,10 @@ load_dotenv()
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-CATEGORIES = ['arborio', 'basmati', 'ipsala', 'jasmine', 'karacadag']
+CATEGORIES = ["arborio", "basmati", "ipsala", "jasmine", "karacadag"]
 
 BUCKET_NAME = "prediction_meta_data"
+
 
 def download_data_from_gcp() -> pd.DataFrame:
     """Download data from GCP bucket and create a dataframe."""
@@ -41,14 +42,17 @@ def download_data_from_gcp() -> pd.DataFrame:
         label.append(data["label"])
 
     # Create a DataFrame from the collected data
-    dataframe = pd.DataFrame({
-        "avg_brightness": avg_brightness,
-        "contrast": contrast,
-        "sharpness": sharpness,
-        "target": label,
-    })
+    dataframe = pd.DataFrame(
+        {
+            "avg_brightness": avg_brightness,
+            "contrast": contrast,
+            "sharpness": sharpness,
+            "target": label,
+        }
+    )
 
     return dataframe
+
 
 def metrics_from_images(data_loader):
     """
@@ -77,16 +81,19 @@ def metrics_from_images(data_loader):
         contrast_list.extend(contrast)
         sharpness_list.extend(sharpness)
         labels_list.extend(labels.tolist())
-    
+
     # Create a DataFrame
-    dataframe = pd.DataFrame({
-        "avg_brightness": avg_brightness_list,
-        "contrast": contrast_list,
-        "sharpness": sharpness_list,
-        "target": labels_list
-    })
-    
+    dataframe = pd.DataFrame(
+        {
+            "avg_brightness": avg_brightness_list,
+            "contrast": contrast_list,
+            "sharpness": sharpness_list,
+            "target": labels_list,
+        }
+    )
+
     return dataframe
+
 
 def extract_features_batch(images):
     """
@@ -106,9 +113,10 @@ def extract_features_batch(images):
 
     # Sharpness: Mean of absolute gradient along height, width and channels
     gradients = np.gradient(images, axis=(1, 2, 3))  # Gradient along , width and channels
-    sharpness = np.mean(np.sqrt(gradients[0]**2 + gradients[1]**2), axis=(1, 2, 3))
+    sharpness = np.mean(np.sqrt(gradients[0] ** 2 + gradients[1] ** 2), axis=(1, 2, 3))
 
     return avg_brightness, contrast, sharpness
+
 
 def download_csv_from_bucket(bucket_name, source_blob_name, destination_file_name):
     """
@@ -131,20 +139,22 @@ def download_csv_from_bucket(bucket_name, source_blob_name, destination_file_nam
     df = pd.read_csv(destination_file_name)
     return df
 
+
 def run_analysis(reference_data: pd.DataFrame, current_data: pd.DataFrame) -> None:
     """Run the analysis and return the report."""
     data_drift_report = Report(metrics=[DataDriftPreset(), DataQualityPreset(), TargetDriftPreset()])
     data_drift_report.run(current_data=reference_data, reference_data=current_data)
     data_drift_report.save_html("monitoring.html")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load and clean up model on startup and shutdown."""
     print("Loading Data")
 
-    bucket_name = 'emils_mlops_data_bucket'
-    source_blob_name = 'data/processed/metric.csv'
-    destination_file_name = 'metric.csv'
+    bucket_name = "emils_mlops_data_bucket"
+    source_blob_name = "data/processed/metric.csv"
+    destination_file_name = "metric.csv"
 
     global train_metrics
     train_metrics = download_csv_from_bucket(bucket_name, source_blob_name, destination_file_name)
@@ -154,12 +164,15 @@ async def lifespan(app: FastAPI):
     print("Cleaning up")
     del train_metrics
 
+
 app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/")
 def read_root():
     """Root endpoint."""
     return {"Hello and welcome to the rice classification monitoring app!"}
+
 
 @app.get("/report", response_class=HTMLResponse)
 async def get_report():

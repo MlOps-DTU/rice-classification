@@ -1,16 +1,16 @@
 import os
+import random
 import subprocess
 import zipfile
 
-from google.cloud import storage
 import hydra
-import torch
-from loguru import logger
 import numpy as np
-import random
 import pandas as pd
+import torch
+from google.cloud import storage
+from loguru import logger
 from sklearn.model_selection import train_test_split
-from torch.utils.data import Subset, DataLoader
+from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 
 # Add a logger to the script that logs messages to a file
@@ -110,16 +110,16 @@ def run_gbucket() -> None:
     client = storage.Client()
 
     # Define the bucket name and the object name
-    bucket_name = 'emils_mlops_data_bucket'
-    folder_name  = 'data/raw/'
-    destination_dir = 'data/raw'
+    bucket_name = "emils_mlops_data_bucket"
+    folder_name = "data/raw/"
+    destination_dir = "data/raw"
 
     # Ensure the destination directory exists
     os.makedirs(destination_dir, exist_ok=True)
 
     # Get the bucket and the blob
     bucket = client.bucket(bucket_name)
-    
+
     # List all the blobs in the specified folder
     blobs = bucket.list_blobs(prefix=folder_name)
 
@@ -127,7 +127,7 @@ def run_gbucket() -> None:
     for blob in blobs:
         # Define the local file path
         local_file_path = os.path.join(destination_dir, os.path.basename(blob.name))
-        
+
         # Download the blob to the local file
         blob.download_to_filename(local_file_path)
         print(f"Downloaded {blob.name} to {local_file_path}")
@@ -161,6 +161,7 @@ def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
 
+
 def metrics_from_images(data_loader):
     """
     Processes a PyTorch DataLoader of images, extracts features in a batch, and converts them into a DataFrame.
@@ -188,16 +189,19 @@ def metrics_from_images(data_loader):
         contrast_list.extend(contrast)
         sharpness_list.extend(sharpness)
         labels_list.extend(labels.tolist())
-    
+
     # Create a DataFrame
-    dataframe = pd.DataFrame({
-        "avg_brightness": avg_brightness_list,
-        "contrast": contrast_list,
-        "sharpness": sharpness_list,
-        "target": labels_list
-    })
-    
+    dataframe = pd.DataFrame(
+        {
+            "avg_brightness": avg_brightness_list,
+            "contrast": contrast_list,
+            "sharpness": sharpness_list,
+            "target": labels_list,
+        }
+    )
+
     return dataframe
+
 
 def extract_features_batch(images):
     """
@@ -217,9 +221,10 @@ def extract_features_batch(images):
 
     # Sharpness: Mean of absolute gradient along height, width and channels
     gradients = np.gradient(images, axis=(1, 2, 3))  # Gradient along , width and channels
-    sharpness = np.mean(np.sqrt(gradients[0]**2 + gradients[1]**2), axis=(1, 2, 3))
+    sharpness = np.mean(np.sqrt(gradients[0] ** 2 + gradients[1] ** 2), axis=(1, 2, 3))
 
     return avg_brightness, contrast, sharpness
+
 
 def upload_to_bucket(source_file_name):
     """
@@ -229,8 +234,8 @@ def upload_to_bucket(source_file_name):
         source_file_name (str): The path to the file to upload.
     """
     # Define the bucket name and the object name
-    bucket_name = 'emils_mlops_data_bucket'
-    destination_blob_name = 'data/processed/metric.csv'
+    bucket_name = "emils_mlops_data_bucket"
+    destination_blob_name = "data/processed/metric.csv"
 
     # Initialize a client
     client = storage.Client()
@@ -241,6 +246,7 @@ def upload_to_bucket(source_file_name):
     blob.upload_from_filename(source_file_name)
     print(f"File {source_file_name} uploaded to {destination_blob_name}.")
 
+
 def process_and_save_metrics():
     """
     Creates a DataLoader from the dataset, processes the images, saves the metrics to a CSV file,
@@ -248,30 +254,31 @@ def process_and_save_metrics():
     """
     # Define the save path for the CSV file
     save_path = "data/processed/metric.csv"
-    
+
     # Ensure the directory exists
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    
+
     # Load the dataset
     data = torch.load("data/processed/train.pt", weights_only=False)
 
     # Define a subset (e.g., first 500 samples or random samples)
     subset_size = 2000
-    subset_indices = random.sample(range(len(data)), subset_size) 
+    subset_indices = random.sample(range(len(data)), subset_size)
     subset_data = Subset(data, subset_indices)
-    
+
     # Create a DataLoader
     data_loader = DataLoader(subset_data, batch_size=32, shuffle=False)
 
     # Extract metrics from images
     metrics_df = metrics_from_images(data_loader)
-    
+
     # Save the DataFrame to a CSV file
     metrics_df.to_csv(save_path, index=False)
     print(f"Metrics saved to {save_path}")
 
     # Upload the CSV file to the cloud bucket
     upload_to_bucket(save_path)
+
 
 if __name__ == "__main__":
     main()
