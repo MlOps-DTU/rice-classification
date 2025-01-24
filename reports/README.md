@@ -217,7 +217,10 @@ These concepts are important in larger projects, so make sure that the code is e
 >
 > Answer:
 
---- question 7 fill here ---
+Within test_api, we have implemented test_root (to test the connection with the api), test_predict_no_file (for the connections without any file, error 422) and test_predict_endpoint (to test a sucessful connection, code 200).
+The test_data file has the test test_get_rice_pictures, which asserts if the train and test are loaded correctly, and if the type and the length are also correct. 
+Within the test_model file we have implemented test_model_construction (asserts that the layers of the model and the number of parameters are correct) and test_model_training (which checks if the loss function returns valid loss, the params.grad are valid …)
+
 
 ### Question 8
 
@@ -232,7 +235,9 @@ These concepts are important in larger projects, so make sure that the code is e
 >
 > Answer:
 
---- question 8 fill here ---
+We have implemented a coverage report in both test_data and test_model files. In the test_data, we can see a coverage percetage of 28%. This low percetage means that only a small portion of the code has been executed during testing. On the other hand, the coverage report of test_model file has a coverage percentage of 78%. As we can see, most of the code has been executed. 
+Since the coverage percentage only indicates the percentage of code that has been run, that does not indicates that the code is error free. A file could have 100% code coverage and still have some errors. 
+
 
 ### Question 9
 
