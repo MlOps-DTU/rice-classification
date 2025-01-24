@@ -522,6 +522,7 @@ Yes, we performed both. For unit_testing on the api, we used pytest and more inf
 > *measure ... and ... that would inform us about this ... behaviour of our application.*
 >
 > Answer: 
+
 We did not monitor by attaching metrics to the application. However, since our application is set up in Google Cloud, we can evaluate the development of various metrics and set up alerts directly on the APIs. This enables us to better monitor system performance and avoid issues like excessive daily requests, which can lead to unexpected costs. Since we store results in a cloud bucket, setting up alerts for capacity issues could be beneficial. For instance, these alerts can trigger automated clean-up processes for old data, ensuring we manage storage efficiently and avoid potential overflows.
 
 While several alerts can be implemented, we should be cautious not to overdo it. Adding too many alerts can make them irrelevant or cause overlap, reducing their effectiveness. By carefully selecting and configuring alerts, we can ensure efficient monitoring without unnecessary noise.
