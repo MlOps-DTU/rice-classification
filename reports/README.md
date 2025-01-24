@@ -507,7 +507,8 @@ Yes, we deployed our API in the cloud on Cloud Run. We did so by creating a `clo
 >
 > Answer:
 
---- question 25 fill here ---
+Yes, we performed both. For unit_testing on the api, we used pytest and more information can be found on question 7. Additionally, we have performed the load testing of our API. It can be found in tests/performancetests/locustfile.py. We created a function called predict to simulate a prediction of a sample_image, and then a function root for the connection to the api. The results shows that, since all the percetiles are the same 4100,   the response time for every request were very similar and took 4.1 seconds per request, and that 43 request were made in total and of all them had similar response times. For real-time image prediction, this response time of 4.1 seconds is very slow, and could indicate optimization issues. 
+
 
 ### Question 26
 
