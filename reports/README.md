@@ -283,9 +283,9 @@ In this project we did make use of DVC for managing our data version. In this wa
 >
 > Answer:
 >
-We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
+We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. **The code check workflow** ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports, the order of the import statements and how they are structed and unused variables. This workflow runs automatically on every push or pull request to the *main* or *master* branches. To make the process faster, we use caching to manage Python dependencies efficiently.
 
-**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.
+**The pre-commit workflow** focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet the coding standards we have specified.
 
 **The testing workflow** automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.
 
@@ -476,7 +476,7 @@ We managed to train our model in the cloud using Vertex AI. We did this by creat
 >
 > Answer:
 
---- question 23 fill here ---
+We did manage to write and API for our rice classification model. To do so, we used FastAPI. We made a small welcome message for the user to make it a more friendly API and made it so that the user can upload a picture of a rice grain and receive back a prediction of the kind of rice that is in the picture as well as the label that denotes that kind of rice. When creating the API we made use of the lifespan structure, where we load the model from Weights and Biases upon application startup as well as define a transformation to the inputed images. When the application is shut down the model is then deleted from memory again.
 
 ### Question 24
 
@@ -492,7 +492,7 @@ We managed to train our model in the cloud using Vertex AI. We did this by creat
 >
 > Answer:
 
---- question 24 fill here ---
+Yes, we deployed our API in the cloud on Cloud Run. We did so by creating a `cloudbuild_api.yaml` where we both build and push the docker image and then deploy it on Cloud Run. To submit the job to Cloud Run a user would have to run this command in the command line: `gcloud builds submit . --config=cloudbuild_api.yaml`. When the API is deployed in the cloud it can then we accessed by a user through a url, that takes the user to the welcoming page of our API and allow the user to navigate to the inference page. Here the user can upload an image that he/she has stored locally and get a prediciton.
 
 ### Question 25
 
