@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 import torch
@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 from fastapi.testclient import TestClient
 
 from src.rice_classification.api import app
+from google.auth.credentials import AnonymousCredentials
 
 
 # Mocking the model and transform
@@ -46,6 +47,16 @@ def client():
     # Create a TestClient for the FastAPI app
     return TestClient(app)
 
+
+@pytest.fixture
+def mock_gcp_client():
+    """Mock the Google Cloud Storage client."""
+    with patch("google.cloud.storage.Client") as mock_client:
+        mock_instance = MagicMock()
+        mock_instance._credentials = AnonymousCredentials()
+        mock_instance.universe_domain = None
+        mock_client.return_value = mock_instance
+        yield mock_client
 
 def test_root(client):
     """Test the root endpoint."""
@@ -106,6 +117,6 @@ tests/test_api.py::test_predict_endpoint PASSED                [100%]
   <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=================== 3 passed, 2 warnings in 7.72s ===================
+=================== 3 passed, 2 warnings in 21.10s ===================
 
 """
