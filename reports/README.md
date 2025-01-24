@@ -546,7 +546,9 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 28 fill here ---
+We implemented a data drifting service to monitor various metrics between the trained data and the data inputted by users. We saved the images received from API requests to a Google Cloud bucket and then loaded them into a monitoring API. This API generates reports using the Evidently library’s DataDriftPreset, DataQualityPreset, and TargetDriftPreset functions.
+
+Since we are working with image data, we evaluated metrics such as average brightness, sharpness, and contrast. This approach allows us to detect shifts in the distribution of data characteristics over time. If significant drifts are identified, we can retrain the model to maintain or improve its performance.
 
 ### Question 29
 
@@ -577,7 +579,12 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 30 fill here ---
+The majority of our project time was dedicated to integrating Google Cloud and ensuring the online APIs functioned correctly. We had to iterate several times with local APIs, Docker, and Cloud Build to make the process more robust to changes and ensure the YAML integration worked seamlessly. The errors we encountered ranged from missing key configurations to library mismatches. Different solutions were needed for instance restructuring the code in the documents or adding the missing libraries in the requirements.txt but the overall approach was to iterate and understand where the errors were coming from.
+
+Building Docker images locally was also a challenging part of the process. Data handling and model loading through other platforms (e.g., Weights and Biases, Google Cloud Build) caused issues compared to the local application. A significant issue arose from using dvc -pull to handle data on the Docker machines, as it frequently failed. Consequently, we opted to download the necessary data directly from Google Cloud Bucket in some instances.
+
+Additionally, running GitHub Actions for testing required considerable attention. We had to modify them several times during the project due to changes in the code structure and implementation, which introduced new issues, and the tests were failing. So, a better consideration of what we need to test and why was needed.
+
 
 ### Question 31
 
