@@ -1,4 +1,5 @@
-from unittest.mock import MagicMock, patch
+from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 import torch
@@ -6,24 +7,20 @@ import torchvision.transforms as transforms
 from fastapi.testclient import TestClient
 
 from src.rice_classification.api import app
-from google.auth.credentials import AnonymousCredentials
 
 
-# Mocking the model and transform
 @pytest.fixture
 def mock_model_and_transform():
+    """
+    Mock the model and attach it along with the transformation pipeline
+    to the FastAPI app state.
+    """
     # Mock the model
     mock_model = MagicMock()
-
-    # Mock the transform function
-    mock_transform = MagicMock()
-
-    # Setup mock output for the model (mocked as a tensor)
-    mock_output = torch.tensor([[0.1, 0.2, 0.3, 0.4, 0.5]])  # Mocked output for 5 classes
+    mock_output = torch.tensor([[0.1, 0.2, 0.3, 0.4, 0.5]])  # Mocked output
     mock_model.return_value = mock_output
 
-    # Setup mock transform to return a fake tensor (mocked input image)
-    mock_transform.return_value = torch.tensor([0.5]).unsqueeze(0)
+    # Define the transform pipeline
     transform = transforms.Compose(
         [
             transforms.Resize((50, 50)),
@@ -31,58 +28,55 @@ def mock_model_and_transform():
             transforms.Normalize(mean=[0.5], std=[0.5]),
         ]
     )
-    # Attach the mocked model and transform to the app state
+
+    # Attach the mock model and transform to the app state
     app.state.model = mock_model
     app.state.transform = transform
 
-    yield mock_model, mock_transform  # Return mocked objects for use in tests
-
-    # Cleanup mocks (if needed)
-    del app.state.model
-    del app.state.transform
+    # Provide the mock model for testing
+    yield mock_model
 
 
 @pytest.fixture
 def client():
-    # Create a TestClient for the FastAPI app
+    """Create a TestClient for the FastAPI app."""
     return TestClient(app)
 
 
-@pytest.fixture
-def mock_gcp_client():
-    """Mock the Google Cloud Storage client."""
-    with patch("google.cloud.storage.Client") as mock_client:
-        mock_instance = MagicMock()
-        mock_instance._credentials = AnonymousCredentials()
-        mock_instance.universe_domain = None
-        mock_client.return_value = mock_instance
-        yield mock_client
-
 def test_root(client):
-    """Test the root endpoint."""
+    """
+    Test the root endpoint to ensure the API is accessible.
+    """
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == ["Hello and welcome to the rice classification app!"]
 
 
 def test_predict_no_file(client):
-    """Test the /predict endpoint without a file."""
+    """
+    Test the /predict endpoint without providing a file.
+    """
     response = client.post("/predict/")
     assert response.status_code == 422  # Unprocessable Entity
 
 
 def test_predict_endpoint(client, mock_model_and_transform):
-    """Test the /predict/ endpoint."""
+    """
+    Test the /predict endpoint with a valid image file.
+    """
 
-    # Provide a sample test image (this could be any valid image path)
-    test_image_path = "tests/sample_image.jpg"
+    # Path to a test image
+    test_image_path = Path("tests/sample_image.jpg")
 
-    # Make a POST request to the /predict/ endpoint with the test image
+    # Ensure the test image exists
+    assert test_image_path.exists(), f"Test image not found at {test_image_path}"
+
+    # Open the test image and send it to the /predict endpoint
     with open(test_image_path, "rb") as img:
         files = {"data": img}
         response = client.post("/predict/", files=files)
 
-    # Check that the response status code is 200 (OK)
+    # Validate the response
     assert response.status_code == 200
     json_response = response.json()
     assert "Prediction of rice category" in json_response
