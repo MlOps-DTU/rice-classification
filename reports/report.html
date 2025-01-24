@@ -67,15 +67,15 @@ will check the repositories and the code to verify your answers.</p>
 <li>[X] Get your model training in GCP using either the Engine or Vertex AI (M21)</li>
 <li>[X] Create a FastAPI application that can do inference using your model (M22)</li>
 <li>[X] Deploy your model in GCP using either Functions or Run as the backend (M23)</li>
-<li>[ ] Write API tests for your application and setup continues integration for these (M24)</li>
-<li>[ ] Load test your application (M24)</li>
+<li>[X] Write API tests for your application and setup continues integration for these (M24)</li>
+<li>[X] Load test your application (M24)</li>
 <li>[ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)</li>
 <li>[ ] Create a frontend for your API (M26)</li>
 </ul>
 <h3>Week 3</h3>
 <ul>
-<li>[ ] Check how robust your model is towards data drifting (M27)</li>
-<li>[ ] Deploy to the cloud a drift detection API (M27)</li>
+<li>[X] Check how robust your model is towards data drifting (M27)</li>
+<li>[X] Deploy to the cloud a drift detection API (M27)</li>
 <li>[ ] Instrument your API with a couple of system metrics (M28)</li>
 <li>[ ] Setup cloud monitoring of your instrumented application (M28)</li>
 <li>[ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)</li>
@@ -88,7 +88,7 @@ will check the repositories and the code to verify your answers.</p>
 <li>[ ] Write some documentation for your application (M32)</li>
 <li>[ ] Publish the documentation to GitHub Pages (M32)</li>
 <li>[X] Revisit your initial project description. Did the project turn out as you wanted?</li>
-<li>[ ] Create an architectural diagram over your MLOps pipeline</li>
+<li>[X] Create an architectural diagram over your MLOps pipeline</li>
 <li>[X] Make sure all group members have an understanding about all parts of the project</li>
 <li>[X] Uploaded all your code to GitHub</li>
 </ul>
@@ -173,7 +173,9 @@ corporate and increase the quality of your code.</p>
 <em>application but also ... .</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 7 fill here ---</p>
+<p>Within test_api, we have implemented test_root (to test the connection with the api), test_predict_no_file (for the connections without any file, error 422) and test_predict_endpoint (to test a sucessful connection, code 200).
+The test_data file has the test test_get_rice_pictures, which asserts if the train and test are loaded correctly, and if the type and the length are also correct.
+Within the test_model file we have implemented test_model_construction (asserts that the layers of the model and the number of parameters are correct) and test_model_training (which checks if the loss function returns valid loss, the params.grad are valid …)</p>
 <h3>Question 8</h3>
 <blockquote>
 <p><strong>What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close</strong>
@@ -184,7 +186,8 @@ corporate and increase the quality of your code.</p>
 </em>code and even if we were then...*</p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 8 fill here ---</p>
+<p>We have implemented a coverage report in both test_data and test_model files. In the test_data, we can see a coverage percetage of 28%. This low percetage means that only a small portion of the code has been executed during testing. On the other hand, the coverage report of test_model file has a coverage percentage of 78%. As we can see, most of the code has been executed.
+Since the coverage percentage only indicates the percentage of code that has been run, that does not indicates that the code is error free. A file could have 100% code coverage and still have some errors.</p>
 <h3>Question 9</h3>
 <blockquote>
 <p><strong>Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and</strong>
@@ -218,9 +221,9 @@ In this project we did make use of DVC for managing our data version. In this wa
 <em>and one for running ... . In particular for our ..., we used ... .An example of a triggered workflow can be seen</em>
 <em>here: <weblink></em></p>
 <p>Answer:</p>
-<p>We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. <strong>The code check workflow</strong> ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports and unused variables. This workflow runs automatically on every push or pull request to the <em>main</em> or <em>master</em> branches. To make the process faster, we use caching to manage Python dependencies efficiently.</p>
+<p>We have organized our continuous integration into three workflows, each focusing on a specific aspect of development. <strong>The code check workflow</strong> ensures repository-wide code quality by using Ruff for linting and auto-formatting. It identifies issues such as unnecessary or duplicate imports, the order of the import statements and how they are structed and unused variables. This workflow runs automatically on every push or pull request to the <em>main</em> or <em>master</em> branches. To make the process faster, we use caching to manage Python dependencies efficiently.</p>
 </blockquote>
-<p><strong>The pre-commit workflow</strong> focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet coding standards.</p>
+<p><strong>The pre-commit workflow</strong> focuses on validating only modified or staged files during a push or pull request. It runs hooks that include linting, formatting, and YAML/JSON validation to ensure that new changes meet the coding standards we have specified.</p>
 <p><strong>The testing workflow</strong> automates unit tests, integration tests, and API endpoint validations. This workflow is set up to run on Ubuntu, Windows, and macOS, testing across Python versions 3.10, 3.11, and 3.12. It covers tasks such as validating API endpoints, preparing datasets, and testing model training. We also use caching for dependencies to optimize the runtime of these tests.</p>
 <p>Together, these workflows provide a robust CI setup that maintains high code quality, ensures efficient development, and supports cross-platform compatibility.</p>
 <h2>Running code and tracking experiments</h2>
@@ -237,7 +240,7 @@ especially the reproducibility of your experiments.</p>
 <em>We used a simple argparser, that worked in the following way: Python  my_script.py --lr 1e-3 --batch_size 25</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>In our project we configured experiments through the use of the <code>Hydra</code> library and config files that contains variables such as the learning rate, batch size and the optimizer configurations for training our model. In our project we made config files for both the data.py file, the train.py file and the evaluate.py file. In each of these files the main function takes an argument that we called <code>config_name</code> that holds a path to the config file with the experiment details. To run an experiment, simply adjust the path to the associated config file. </p>
+<p>In our project we configured experiments through the use of the <code>Hydra</code> library and config files that contains variables such as the learning rate, batch size and the optimizer configurations for training our model. In our project we made config files for both the data.py file, the train.py file and the evaluate.py file. In each of these files the main function takes an argument that we called <code>config_name</code> that holds a path to the config file with the experiment details. To run an experiment, simply adjust the path to the associated config file.</p>
 <h3>Question 13</h3>
 <blockquote>
 <p><strong>Reproducibility of experiments are important. Related to the last question, how did you secure that no information</strong>
@@ -261,8 +264,13 @@ especially the reproducibility of your experiments.</p>
 <em>As seen in the second image we are also tracking ... and ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>As seen in the first image we have tracked the training loss development when training during each experiment, which informs us both if the model is learning and to what extent the model is converging. </p>
-<p><img alt="Training Loss" src="figures/trainloss.png" /></p>
+<p>As seen in the first image below we have tracked the training loss development when training during each experiment, which informs us both if the model is learning and to what extent the model is converging. A curve is shown for each training run. The image shows that all our training runs where able to converge.
+<img alt="Training Loss" src="figures/trainloss.png" /></p>
+<p>As seen in the second image below we also tracked the training accuracy and how it developed over the training duration. This informs us of the ability of the model to correctly classify the rice images and also shows us to what extent the model training is able to converge. The image shows that all our training runs where able to converge.</p>
+<p><img alt="Training Accuracy" src="figures/trainaccuracy.png" /></p>
+<p>Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. We store parameters such as the batch size, number of epochs and the learning rate. Morover, we track the performance metrics: accuracy, f1-scores, precision and recall. In that way we are able to track what parameters were used to train each model and the resulting performance. Moreover, each model is also saved so it is possible to download it from Weights and Biases as is done in our evaluation file.</p>
+<p><img alt="Model Info" src="figures/modelinfo.png" /></p>
+<p>In this project we were more intrested in learning about the operations part, and not so focused on achieving the best model performance. Therefore, we did not spend the time on doing a parameter sweep to achieve the best model performance, but doing this is also supported through Weights and Biases.</p>
 <h3>Question 15</h3>
 <blockquote>
 <p><strong>Docker is an important tool for creating containerized applications. Explain how you used docker in your</strong>
@@ -273,7 +281,7 @@ especially the reproducibility of your experiments.</p>
 <em>training docker image: <code>docker run trainer:latest lr=1e-3 batch_size=64</code>. Link to docker file: <weblink></em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 15 fill here ---</p>
+<p>For our project we developed several docker images, one for training, one for our inference API and one for our data drifting montior API. The docker files for these images can be found in the folder <code>dockerfiles</code> of our project. For example to build one of docker files from the main directory of the project, one should run <code>docker build -f dockerfiles/monitoring.dockerfile . -t monitoring:latest</code> and then to run it, one can run: <code>docker run monitoring:latest</code>. Link to the docker files: <a href="https://github.com/MlOps-DTU/rice-classification/tree/master/dockerfiles">Docker Files</a>. In our project we used Docker to containerize our applications so that we were able to run them in the cloud. Hence, we created the docker images and pushed them to gcloud using gcloud build. In that way we can host them on the cloud and let others access them.</p>
 <h3>Question 16</h3>
 <blockquote>
 <p><strong>When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you</strong>
@@ -284,7 +292,7 @@ especially the reproducibility of your experiments.</p>
 <em>run of our main code at some point that showed ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 16 fill here ---</p>
+<p>The debugging methos used in this project was dependent on each different group member. For some issues simple print statements were used, while for more complex issues we resorted to using the build-in python debugger and the build-in debugger in Visual Studio Code. In that way we were able to insert stops and track variables as we moved through the code. In this project we did not use profilling. Not because we think it is perfect, but because we focused on other elements of the course curriculum. If we had more time, it would be a good idea to do profiling to identify areas of the code that could be improved to improve run time.</p>
 <h2>Working in the cloud</h2>
 <blockquote>
 <p>In the following section we would like to know more about your experience when developing in the cloud.</p>
@@ -297,7 +305,7 @@ especially the reproducibility of your experiments.</p>
 <em>We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 17 fill here ---</p>
+<p>In this project we made use of Cloud Run, Cloud Build, Vertex AI, Cloud Storage and Weights and Biases's model artifact to store models. We used Cloud Run to deploy our containerized (docker) applications. Cloud Build was used for continuous integration, and we used that for automatically building and pushing our docker images to the cloud and tranfering them to Cloud Run upon changes in our github repository. In this project we used Vertex AI for training our classification model, but Vertex AI is in principal and end-to-end service that can take care of everything machine learning related in the cloud. We used Cloud Bucket to store our image data. Lastly, we used Weights and Biases to store our model and its related performance metrics and hyper-parameters.</p>
 <h3>Question 18</h3>
 <blockquote>
 <p><strong>The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs</strong>
@@ -306,30 +314,34 @@ especially the reproducibility of your experiments.</p>
 <p>Example:
 <em>We used the compute engine to run our ... . We used instances with the following hardware: ... and we started the</em>
 <em>using a custom container: ...</em></p>
-<p>Answer:</p>
+<p>Answer:
+In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: <a href="https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml">Monitoring .yaml file</a>. When we trained our model we created a custom job uisng a n1-highmem-2
+machine with 1 worker.</p>
 </blockquote>
-<p>--- question 18 fill here ---</p>
 <h3>Question 19</h3>
 <blockquote>
 <p><strong>Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.</strong>
 <strong>You can take inspiration from <a href="figures/bucket.png">this figure</a>.</strong></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 19 fill here ---</p>
+<p>The bucket that we used for this project can be seen below. We stored our data as a zip file due to performance issues with DVC when handling a large amount of files. The zip file contains folders with each image class, that each contain individual images. We also stored the processed training and test data set so that we did not have to process them every time as well as a data frame of image characteristics of the training set for the data drifting monitoring.
+<img alt="Data Bucket Group 27" src="figures/group_27_bucket.png" /></p>
 <h3>Question 20</h3>
 <blockquote>
 <p><strong>Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have</strong>
 <strong>stored. You can take inspiration from <a href="figures/registry.png">this figure</a>.</strong></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 20 fill here ---</p>
+<p>Here is an image where we see the docker images of our api, our monitoring api and our train images.
+<img alt="Artifact Registry Group 27" src="figures/group_27_registry.png" /></p>
 <h3>Question 21</h3>
 <blockquote>
 <p><strong>Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in</strong>
 <strong>your project. You can take inspiration from <a href="figures/build.png">this figure</a>.</strong></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 21 fill here ---</p>
+<p>Here we see our build history. The two latest greeen builds are the API and the monitoring API respectively:
+<img alt="Build History" src="figures/group_27_build_hist.png" /></p>
 <h3>Question 22</h3>
 <blockquote>
 <p><strong>Did you manage to train your model in the cloud using either the Engine or Vertex AI? If yes, explain how you did</strong>
@@ -340,7 +352,7 @@ especially the reproducibility of your experiments.</p>
 <em>was because ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 22 fill here ---</p>
+<p>We managed to train our model in the cloud using Vertex AI. We did this by creating <code>vertex_ai_train.yaml</code> file that we then submitted to gcloud through <code>gcloud builds submit</code>. In this file we also injected our Weights and Biases API Key through the secrets manager in gcloud. We did this as to keep the API key hidden from the other public files, but accessible to the code when run in the cloud. When creating the custom Vertex AI job we specified the machine type in the file config.yaml. We used Vertex AI because this service automatically creates the CM for us, launch the training procedure and close the VM again afterwards.</p>
 <h2>Deployment</h2>
 <h3>Question 23</h3>
 <blockquote>
@@ -352,7 +364,7 @@ especially the reproducibility of your experiments.</p>
 <em>to the API to make it more ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 23 fill here ---</p>
+<p>We did manage to write and API for our rice classification model. To do so, we used FastAPI. We made a small welcome message for the user to make it a more friendly API and made it so that the user can upload a picture of a rice grain and receive back a prediction of the kind of rice that is in the picture as well as the label that denotes that kind of rice. When creating the API we made use of the lifespan structure, where we load the model from Weights and Biases upon application startup as well as define a transformation to the inputed images. When the application is shut down the model is then deleted from memory again.</p>
 <h3>Question 24</h3>
 <blockquote>
 <p><strong>Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and</strong>
@@ -364,7 +376,7 @@ especially the reproducibility of your experiments.</p>
 <em><code>curl -X POST -F "file=@file.json"&lt;weburl&gt;</code></em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 24 fill here ---</p>
+<p>Yes, we deployed our API in the cloud on Cloud Run. We did so by creating a <code>cloudbuild_api.yaml</code> where we both build and push the docker image and then deploy it on Cloud Run. To submit the job to Cloud Run a user would have to run this command in the command line: <code>gcloud builds submit . --config=cloudbuild_api.yaml</code>. When the API is deployed in the cloud it can then we accessed by a user through a url, that takes the user to the welcoming page of our API and allow the user to navigate to the inference page. Here the user can upload an image that he/she has stored locally and get a prediciton.</p>
 <h3>Question 25</h3>
 <blockquote>
 <p><strong>Did you perform any unit testing and load testing of your API? If yes, explain how you did it and what results for</strong>
@@ -375,7 +387,7 @@ especially the reproducibility of your experiments.</p>
 <em>before the service crashed.</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 25 fill here ---</p>
+<p>Yes, we performed both. For unit_testing on the api, we used pytest and more information can be found on question 7. Additionally, we have performed the load testing of our API. It can be found in tests/performancetests/locustfile.py. We created a function called predict to simulate a prediction of a sample_image, and then a function root for the connection to the api. The results shows that, since all the percetiles are the same 4100,   the response time for every request were very similar and took 4.1 seconds per request, and that 43 request were made in total and of all them had similar response times. For real-time image prediction, this response time of 4.1 seconds is very slow, and could indicate optimization issues.</p>
 <h3>Question 26</h3>
 <blockquote>
 <p><strong>Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how</strong>
@@ -386,6 +398,8 @@ especially the reproducibility of your experiments.</p>
 <em>measure ... and ... that would inform us about this ... behaviour of our application.</em></p>
 <p>Answer:</p>
 </blockquote>
+<p>We did not monitor by attaching metrics to the application. However, since our application is set up in Google Cloud, we can evaluate the development of various metrics and set up alerts directly on the APIs. This enables us to better monitor system performance and avoid issues like excessive daily requests, which can lead to unexpected costs. Since we store results in a cloud bucket, setting up alerts for capacity issues could be beneficial. For instance, these alerts can trigger automated clean-up processes for old data, ensuring we manage storage efficiently and avoid potential overflows.</p>
+<p>While several alerts can be implemented, we should be cautious not to overdo it. Adding too many alerts can make them irrelevant or cause overlap, reducing their effectiveness. By carefully selecting and configuring alerts, we can ensure efficient monitoring without unnecessary noise.</p>
 <p>--- question 26 fill here ---</p>
 <h2>Overall discussion of project</h2>
 <blockquote>
@@ -401,7 +415,7 @@ especially the reproducibility of your experiments.</p>
 <em>costing the most was ... due to ... . Working in the cloud was ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 27 fill here ---</p>
+<p>During our project we only ran stuff in the cloud through the account of s233791. He as given a free app trial of 7,500Dkk credits and the trail also gave some free tier benefits for compute. Hence, overall we ended spending a total of 27Dkk in credits, with discounts on Cloud Run. Costing the most was cloud storage where we spend 15.39Dkk and the second most expensive item was Compute Engine costing 10.97. Vertex AI only cost 0.26Dkk and the Artifact Registry cost 0.57Dkk. In the begining working in the cloud was quite frustrating, because we had to figure out authentication to different services, but once we had control of that it was a really nice experience being able to create and run everything remotely. The best part was not having to train models locally.</p>
 <h3>Question 28</h3>
 <blockquote>
 <p><strong>Did you implement anything extra in your project that is not covered by other questions? Maybe you implemented</strong>
@@ -413,7 +427,8 @@ especially the reproducibility of your experiments.</p>
 <em>implemented using ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 28 fill here ---</p>
+<p>We implemented a data drifting service to monitor various metrics between the trained data and the data inputted by users. We saved the images received from API requests to a Google Cloud bucket and then loaded them into a monitoring API. This API generates reports using the Evidently library’s DataDriftPreset, DataQualityPreset, and TargetDriftPreset functions.</p>
+<p>Since we are working with image data, we evaluated metrics such as average brightness, sharpness, and contrast. This approach allows us to detect shifts in the distribution of data characteristics over time. If significant drifts are identified, we can retrain the model to maintain or improve its performance.</p>
 <h3>Question 29</h3>
 <blockquote>
 <p><strong>Include a figure that describes the overall architecture of your system and what services that you make use of.</strong>
@@ -425,6 +440,11 @@ especially the reproducibility of your experiments.</p>
 <em>Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...</em></p>
 <p>Answer:</p>
 </blockquote>
+<p>You can see the project arcitecture in <img alt="architecture" src="figures/project_architecture.png" /> We have used several of the tools presetned in the course.</p>
+<p>First, we created a GitHub repository for our project and a Google Cloud bucket for storing the data. We used dvc push to upload the data after running data.py to process the data. Since generating the data for training the model is not a step that needs to be executed multiple times initially, we did not include continuous integration for now. However, if the data changes, <code>data.py</code> should automatically recreate the processed data.</p>
+<p>Regarding GitHub, we set up different actions that run tests on each push a member makes. This ensures that everything is good with the new changes. Similarly, we implemented a pre-commit hook that ensures the code aligns with proper formatting and coding standards.</p>
+<p>For model training, we used Vertex AI by running the associated <code>.yaml</code> file, which trains the model and then saves it to the Weights and Biases account, enabling version control. Thus, then the prediction API can download the latest model from there without any code changes, even if we retrain the model.</p>
+<p>We implemented Dockerfiles to build images for the different APIs (prediction and drifting), and their continuous integration happens through the <code>.yaml</code> files, which build the images, push them to the registry, and then deploy them to Cloud Run. This enables online access to the application for users to the prediction API. Similarly, the monitoring API compares the data provided by users with the data used for training. This happens automatically as the monitoring app reads the data from a cloud bucket where the user data has been saved and the training data from another (generated by the data.py also stored in a bucket).</p>
 <p>--- question 29 fill here ---</p>
 <h3>Question 30</h3>
 <blockquote>
@@ -435,7 +455,9 @@ especially the reproducibility of your experiments.</p>
 <em>The biggest challenges in the project was using ... tool to do ... . The reason for this was ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 30 fill here ---</p>
+<p>The majority of our project time was dedicated to integrating Google Cloud and ensuring the online APIs functioned correctly. We had to iterate several times with local APIs, Docker, and Cloud Build to make the process more robust to changes and ensure the YAML integration worked seamlessly. The errors we encountered ranged from missing key configurations to library mismatches. Different solutions were needed for instance restructuring the code in the documents or adding the missing libraries in the requirements.txt but the overall approach was to iterate and understand where the errors were coming from.</p>
+<p>Building Docker images locally was also a challenging part of the process. Data handling and model loading through other platforms (e.g., Weights and Biases, Google Cloud Build) caused issues compared to the local application. A significant issue arose from using <code>dvc pull</code> to handle data on the Docker machines, as it frequently failed. Consequently, we opted to download the necessary data directly from Google Cloud Bucket in some instances.</p>
+<p>Additionally, running GitHub Actions for testing required considerable attention. We had to modify them several times during the project due to changes in the code structure and implementation, which introduced new issues, and the tests were failing. So, a better consideration of what we need to test and why was needed.</p>
 <h3>Question 31</h3>
 <blockquote>
 <p><strong>State the individual contributions of each team member. This is required information from DTU, because we need to</strong>
@@ -448,4 +470,8 @@ especially the reproducibility of your experiments.</p>
 <em>All members contributed to code by...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 31 fill here ---</p>
+<p>s246714 - Created the original repo and was tasked with setting up a continous workflow that triggers when data changes.</p>
+<p>s232165 - Did the training and evaluation of our model, as well as continous integration for the tests, pre-commit hooks and linting steps.</p>
+<p>s232515 - Was in charge of developing the tests and load-testing and together with s232165 made them run on github too. Also did the model part.</p>
+<p>s233791 - Was in charge of cookiecutter, working with hydra and configuration, did the data part in parternership, ran the cloud stuff for all our applications, created the weights and biases acoount and setup in train. Did the DVC data versioning and docker files.</p>
+<p>s210169 - Did the data.py in partnership, did some of the docker and .yaml files, in charge of developing the api and the monitoring api as well as making it run on the cloud.</p>
