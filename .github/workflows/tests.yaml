@@ -28,17 +28,21 @@ jobs:
     - name: Set up DVC
       uses: iterative/setup-dvc@v1
 
-    - name: Get data
-      run: dvc pull
+    - name: Authenticate with Google Cloud
+      run: |
+        echo "${{ secrets.GCLOUD_AUTH }}" > gcloud-auth.json
+        gcloud auth activate-service-account --key-file=gcloud-auth.json
+
+    - name: Configure DVC Remote
+      run: |
+        dvc remote modify myremote gdrive_use_service_account true
+        dvc remote modify myremote gdrive_service_account_json_path gcloud-auth.json
+
+    - name: Pull Data with DVC
+      run: |
+        dvc pull -v
       env:
         GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-
-    - name: Download additional data (if needed)
-      run: |
-        gsutil cp -r gs://emils_mlops_data_bucket/data .
 
     - name: Install dependencies
       run: |
