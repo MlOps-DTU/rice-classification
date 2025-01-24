@@ -266,7 +266,8 @@ s233791, s210169, s232165, s232515, s246714
 > *pipeline*
 >
 > Answer:
->In this project we did make use of DVC for managing our data version. In this was we are able to track what version of the data we are working with and more importantly revert to a previous of the data to recreate our experiments if for example unexpteced behavior of a model is seen after training on a new data set. Using DVC also makes it easy for a new team member to access the data, that can be pulled through the simple command `dvc pull`. However, in our code we ended up not pulling the data through DVC, but pulled the data directly from our associated google cloud bucket. In this project we only worked with the data set we started with, but DVC makes it easy to add additional data, while ensuring data version control.
+
+In this project we did make use of DVC for managing our data version. In this was we are able to track what version of the data we are working with and more importantly revert to a previous of the data to recreate our experiments if for example unexpteced behavior of a model is seen after training on a new data set. Using DVC also makes it easy for a new team member to access the data, that can be pulled through the simple command `dvc pull`. However, in our code we ended up not pulling the data through DVC, but pulled the data directly from our associated google cloud bucket. In this project we only worked with the data set we started with, but DVC makes it easy to add additional data, while ensuring data version control.
 
 ### Question 11
 
