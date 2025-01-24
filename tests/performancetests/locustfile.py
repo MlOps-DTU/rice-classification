@@ -145,14 +145,5 @@ POST     /predict/     4100   4100   4100   4100   4100   4100   4100   4100   4
 --------||--------|------|------|------|------|------|------|------|------|------|------|------
          Aggregated     4100   4100   4100   4100   4100   4100   4100   4100   4100   4100   4100     39
 
-Error report
-# occurrences      Error                                                 
-
-------------------|-------------------------------------------------------------
-17                 POST /predict/: ConnectionRefusedError(10061, '[WinError 10061] No connection could be made because the target machine actively refused it.')
-22                 GET /: ConnectionRefusedError(10061, '[WinError 10061] No connection could be made because the target machine actively refused it.')
-------------------|-------------------------------------------------------------
-
-
 
 """
