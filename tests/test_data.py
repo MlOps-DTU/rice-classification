@@ -48,34 +48,36 @@ C:/Users/USUARIO/AppData/Local/Programs/Python/Python312/Lib/site-packages/pytes
 The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
 
   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
-============================ test session starts =============================
+========================== test session starts ===========================
 platform win32 -- Python 3.12.0, pytest-8.3.4, pluggy-1.5.0
-rootdir: C:/Users/USUARIO/Documents/DTU/MLOps5/rice-classification
+rootdir: C:/Users/USUARIO/Documents/DTU/MLOps7/rice-classification
 configfile: pyproject.toml
 plugins: anyio-4.3.0, hydra-core-1.3.2, asyncio-0.25.2
 asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None
-collected 2 items
+collected 1 item                                                          
 
-tests/test_data.py ..                                                   [100%]
+tests/test_data.py .                                                [100%]
 
-============================== warnings summary ==============================
-tests/test_data.py::test_main
-  C:/Users/USUARIO/Documents/DTU/MLOps5/rice-classification/tests/test_data.py:39: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-    train_set = torch.load(train_file)
+============================ warnings summary ============================ 
+../../../../AppData/Roaming/Python/Python312/site-packages/dateutil/tz/tz.py:37
+  C:/Users/USUARIO/AppData/Roaming/Python/Python312/site-packages/dateutil/tz/tz.py:37: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+    EPOCH = datetime.datetime.utcfromtimestamp(0)
 
-tests/test_data.py::test_main
-  C:/Users/USUARIO/Documents/DTU/MLOps5/rice-classification/tests/test_data.py:40: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-    test_set = torch.load(test_file)
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.MessageMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
 
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================= 2 passed, 2 warnings in 10.47s =======================
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: Type google._upb._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14. 
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html    
+===================== 1 passed, 3 warnings in 13.78s ===================== 
 
 
 >> coverage report
 Name                                  Stmts   Miss  Cover
 ---------------------------------------------------------
 src/rice_classification/__init__.py       0      0   100%
-src/rice_classification/data.py          58     21    64%
+src/rice_classification/data.py         110     79    28%
 ---------------------------------------------------------
-TOTAL                                    58     21    64%
+TOTAL                                   110     79    28%
 """

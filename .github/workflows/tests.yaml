@@ -25,10 +25,18 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
+    - name: Set up DVC
+      uses: iterative/setup-dvc@v1
+
+    - name: Get data
+      run: dvc pull
+      env:
+        GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    - name: Download data
+    - name: Download additional data (if needed)
       run: |
         gsutil cp -r gs://emils_mlops_data_bucket/data .
 
