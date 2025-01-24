@@ -247,7 +247,7 @@ These concepts are important in larger projects, so make sure that the code is e
 >
 > Answer:
 
---- question 9 fill here ---
+During our project each team member had different levels of experience working with git. Therefore, some people managed to work in their own branch in addition to the main branch, and merge code through pull requests while others spend the time becoming more familiar with git and ended up merging the code by pushing directly to the main branch. Ideally we would all have sat down and the more familiar members could show the rest of the group how to make branches and pull requests, but the group worked mostly online and with different time schedules and time zones. That being said, in future projects it would be ideal for everyone to create either their own branch in addition to the main or for everyone to create a new branch everytime a new feature is developed.
 
 ### Question 10
 
@@ -261,8 +261,7 @@ These concepts are important in larger projects, so make sure that the code is e
 > *pipeline*
 >
 > Answer:
-
---- question 10 fill here ---
+In this project we did make use of DVC for managing our data version. In this was we are able to track what version of the data we are working with and more importantly revert to a previous of the data to recreate our experiments if for example unexpteced behavior of a model is seen after training on a new data set. Using DVC also makes it easy for a new team member to access the data, that can be pulled through the simple command `dvc pull`. However, in our code we ended up not pulling the data through DVC, but pulled the data directly from our associated google cloud bucket. In this project we only worked with the data set we started with, but DVC makes it easy to add additional data, while ensuring data version control.
 
 ### Question 11
 
@@ -304,7 +303,7 @@ Together, these workflows provide a robust CI setup that maintains high code qua
 >
 > Answer:
 
---- question 12 fill here ---
+In our project we configured experiments through the use of the `Hydra` library and config files that contains variables such as the learning rate, batch size and the optimizer configurations for training our model. In our project we made config files for both the data.py file, the train.py file and the evaluate.py file. In each of these files the main function takes an argument that we called `config_name` that holds a path to the config file with the experiment details. To run an experiment, simply adjust the path to the associated config file. 
 
 ### Question 13
 
@@ -319,7 +318,7 @@ Together, these workflows provide a robust CI setup that maintains high code qua
 >
 > Answer:
 
---- question 13 fill here ---
+To ensure that our experiements are reproducible and can be tracked we did two key things. First of all we made use of config files, so when an experiment is run key variables are pulled from this config file, and we are able to store these variables. If we wished to make another experiment we would just add another config file and save the old one so we know how we arrived at the results we achieved. To reproduce the experiment one would simply have to run the code again with the same config file. In addition to making use of config files we also tracked the model performance during training, and saved the model itself using Weights and Biases. In that way we can always keep track of what parameters we have used during training and the resulting model and thereby be able to train a model in a similar way or do inference with the model resulting from a specific experiment.
 
 ### Question 14
 
@@ -336,7 +335,16 @@ Together, these workflows provide a robust CI setup that maintains high code qua
 >
 > Answer:
 
---- question 14 fill here ---
+As seen in the first image below we have tracked the training loss development when training during each experiment, which informs us both if the model is learning and to what extent the model is converging.
+![Training Loss](figures/trainloss.png)
+
+As seen in the second image below we also tracked the training accuracy and how it developed over the training duration. This informs us of the ability of the model to correctly classify the rice images and also shows us to what extent the model training is able to converge.
+
+![Training Accuracy](figures/trainaccuracy.png)
+
+Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. In that way we are able to track what parameters were used to train each model and the resulting performance. 
+
+![Model Info](figures/modelinfo.png)
 
 ### Question 15
 

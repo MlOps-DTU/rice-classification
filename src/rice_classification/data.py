@@ -134,27 +134,6 @@ def run_gbucket() -> None:
 
     print("All files downloaded successfully.")
 
-
-# def run_dvc_pull() -> None:
-#     """
-#     Executes the `dvc pull` command to fetch data from the remote storage.
-
-#     Parameters:
-#         None
-
-#     Returns:
-#         None
-
-#     Raises:
-#         subprocess.CalledProcessError: If the `dvc pull` command fails.
-#     """
-#     try:
-#         # Run the `dvc pull` command
-#         subprocess.run(["dvc", "pull", "-v"], check=True)
-#     except subprocess.CalledProcessError as e:
-#         logger.error(f"DVC Pull Failed: {e}")
-
-
 def unzip_file(zip_file_path: str = "data/raw/Arborio.zip", extract_to_path: str = "data/raw_unzipped") -> None:
     """
     Unzips a specified zip file to a given directory.
