@@ -86,15 +86,15 @@ will check the repositories and the code to verify your answers.
 * [X] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [X] Create a FastAPI application that can do inference using your model (M22)
 * [X] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
-* [ ] Load test your application (M24)
+* [X] Write API tests for your application and setup continues integration for these (M24)
+* [X] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [ ] Create a frontend for your API (M26)
 
 ### Week 3
 
-* [ ] Check how robust your model is towards data drifting (M27)
-* [ ] Deploy to the cloud a drift detection API (M27)
+* [X] Check how robust your model is towards data drifting (M27)
+* [X] Deploy to the cloud a drift detection API (M27)
 * [ ] Instrument your API with a couple of system metrics (M28)
 * [ ] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
@@ -107,7 +107,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Write some documentation for your application (M32)
 * [ ] Publish the documentation to GitHub Pages (M32)
 * [X] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
+* [X] Create an architectural diagram over your MLOps pipeline
 * [X] Make sure all group members have an understanding about all parts of the project
 * [X] Uploaded all your code to GitHub
 
@@ -335,16 +335,18 @@ To ensure that our experiements are reproducible and can be tracked we did two k
 >
 > Answer:
 
-As seen in the first image below we have tracked the training loss development when training during each experiment, which informs us both if the model is learning and to what extent the model is converging.
+As seen in the first image below we have tracked the training loss development when training during each experiment, which informs us both if the model is learning and to what extent the model is converging. A curve is shown for each training run. The image shows that all our training runs where able to converge.
 ![Training Loss](figures/trainloss.png)
 
-As seen in the second image below we also tracked the training accuracy and how it developed over the training duration. This informs us of the ability of the model to correctly classify the rice images and also shows us to what extent the model training is able to converge.
+As seen in the second image below we also tracked the training accuracy and how it developed over the training duration. This informs us of the ability of the model to correctly classify the rice images and also shows us to what extent the model training is able to converge. The image shows that all our training runs where able to converge.
 
 ![Training Accuracy](figures/trainaccuracy.png)
 
-Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. In that way we are able to track what parameters were used to train each model and the resulting performance. 
+Lastly, as seen in the third image below we also saved each model, its hyper-parameters and performance indicators. We store parameters such as the batch size, number of epochs and the learning rate. Morover, we track the performance metrics: accuracy, f1-scores, precision and recall. In that way we are able to track what parameters were used to train each model and the resulting performance. Moreover, each model is also saved so it is possible to download it from Weights and Biases as is done in our evaluation file. 
 
 ![Model Info](figures/modelinfo.png)
+
+In this project we were more intrested in learning about the operations part, and not so focused on achieving the best model performance. Therefore, we did not spend the time on doing a parameter sweep to achieve the best model performance, but doing this is also supported through Weights and Biases. 
 
 ### Question 15
 
@@ -359,7 +361,7 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 15 fill here ---
+For our project we developed several docker images, one for training, one for our inference API and one for our data drifting montior API. The docker files for these images can be found in the folder `dockerfiles` of our project. For example to build one of docker files from the main directory of the project, one should run `docker build -f dockerfiles/monitoring.dockerfile . -t monitoring:latest` and then to run it, one can run: `docker run monitoring:latest`. Link to the docker files: [Docker Files](https://github.com/MlOps-DTU/rice-classification/tree/master/dockerfiles). In our project we used Docker to containerize our applications so that we were able to run them in the cloud. Hence, we created the docker images and pushed them to gcloud using gcloud build. In that way we can host them on the cloud and let others access them.
 
 ### Question 16
 
@@ -374,7 +376,7 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 16 fill here ---
+The debugging methos used in this project was dependent on each different group member. For some issues simple print statements were used, while for more complex issues we resorted to using the build-in python debugger and the build-in debugger in Visual Studio Code. In that way we were able to insert stops and track variables as we moved through the code. In this project we did not use profilling. Not because we think it is perfect, but because we focused on other elements of the course curriculum. If we had more time, it would be a good idea to do profiling to identify areas of the code that could be improved to improve run time.  
 
 ## Working in the cloud
 
@@ -391,7 +393,7 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 17 fill here ---
+In this project we made use of Cloud Run, Cloud Build, Vertex AI, Cloud Storage and Weights and Biases's model artifact to store models. We used Cloud Run to deploy our containerized (docker) applications. Cloud Build was used for continuous integration, and we used that for automatically building and pushing our docker images to the cloud and tranfering them to Cloud Run upon changes in our github repository. In this project we used Vertex AI for training our classification model, but Vertex AI is in principal and end-to-end service that can take care of everything machine learning related in the cloud. We used Cloud Bucket to store our image data. Lastly, we used Weights and Biases to store our model and its related performance metrics and hyper-parameters.
 
 ### Question 18
 
@@ -405,8 +407,7 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 > *using a custom container: ...*
 >
 > Answer:
-
---- question 18 fill here ---
+In this project we did not use the compute engine directly and did not explicitly create VMs through the Compute engine, but accessed compute power through the above mentioned cloud services such as Cloud Build, Cloud Run and Vertex AI. When we deployed both our inference API and the data drift monitoring API we used instances with a single CPU and 1024MB of memory. We ran our applications by containerizing them with Docker and then build them using Cloud Build based on the related .yaml files that can be found in our repo. An example of such a file is the .yaml file for our monitoring API that can be found on this link: [Monitoring .yaml file](https://github.com/MlOps-DTU/rice-classification/blob/master/cloudbuild_monitoring.yaml).
 
 ### Question 19
 
@@ -415,7 +416,9 @@ Lastly, as seen in the third image below we also saved each model, its hyper-par
 >
 > Answer:
 
---- question 19 fill here ---
+The bucket that we used for this project can be seen below. We stored our data as a zip file due to performance issues with DVC when handling a large amount of files. The zip file contains folders with each image class, that each contain individual images.
+![Data Bucket Group 27](figures/group_27_bucket.png)
+
 
 ### Question 20
 
