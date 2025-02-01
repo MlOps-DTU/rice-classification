@@ -14,7 +14,7 @@ uvicorn==0.23.2
 pydantic==2.10.5
 python-multipart==0.0.20
 httpx==0.28.1
-numpy==1.26.3
+numpy==2.2.2
 google-cloud-storage==2.19.0
 pytz==2024.2
 pandas==2.2.1
